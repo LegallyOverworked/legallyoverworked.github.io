@@ -1,0 +1,1500 @@
+Directory: src
+
+Directory Structure:
+```
+.
+.
+├── ./._App.tsx
+├── ./._assets
+├── ./._components
+├── ./._index.css
+├── ./._main.tsx
+├── ./._vite-env.d.ts
+├── ./App.tsx
+├── ./assets
+│   ├── ./assets/._closeup_diffusion.jpeg
+│   ├── ./assets/._legallyoverworked_pic.jpeg
+│   ├── ./assets/._running101k.jpeg
+│   ├── ./assets/._running101klookaway.jpeg
+│   ├── ./assets/closeup_diffusion.jpeg
+│   ├── ./assets/home_page_add1.jpg
+│   ├── ./assets/home_page_add2.jpg
+│   ├── ./assets/home_page_add3.jpg
+│   ├── ./assets/home_page_add4.jpeg
+│   ├── ./assets/home_page_add5.png
+│   ├── ./assets/home_page_add6.jpg
+│   ├── ./assets/legallyoverworked_pic.jpeg
+│   ├── ./assets/running101k.jpeg
+│   └── ./assets/running101klookaway.jpeg
+├── ./components
+│   ├── ./components/._Blog.tsx
+│   ├── ./components/._CV.tsx
+│   ├── ./components/._Contact.tsx
+│   ├── ./components/._Home.tsx
+│   ├── ./components/._Navbar.tsx
+│   ├── ./components/._Personal.tsx
+│   ├── ./components/._Projects.tsx
+│   ├── ./components/._Research.tsx
+│   ├── ./components/._cards
+│   ├── ./components/._forms
+│   ├── ./components/Blog.tsx
+│   ├── ./components/CV.tsx
+│   ├── ./components/Contact.tsx
+│   ├── ./components/Home.tsx
+│   ├── ./components/Navbar.tsx
+│   ├── ./components/Personal.tsx
+│   ├── ./components/Projects.tsx
+│   ├── ./components/Research.tsx
+│   ├── ./components/cards
+│   │   ├── ./components/cards/._BlogCard.tsx
+│   │   ├── ./components/cards/._ContactInfo.tsx
+│   │   ├── ./components/cards/._PublicationCard.tsx
+│   │   ├── ./components/cards/._ResearchCard.tsx
+│   │   ├── ./components/cards/BlogCard.tsx
+│   │   ├── ./components/cards/ContactInfo.tsx
+│   │   ├── ./components/cards/PublicationCard.tsx
+│   │   └── ./components/cards/ResearchCard.tsx
+│   └── ./components/forms
+│       ├── ./components/forms/._ContactForm.tsx
+│       └── ./components/forms/ContactForm.tsx
+├── ./index.css
+├── ./main.tsx
+└── ./vite-env.d.ts
+```
+
+Contents of App.tsx:
+```
+import React, { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Research from './components/Research';
+import Projects from './components/Projects';
+import Blog from './components/Blog';
+import Personal from './components/Personal';
+import CV from './components/CV';
+import Contact from './components/Contact';
+
+function App() {
+  const [currentTab, setCurrentTab] = useState('Home');
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const renderContent = () => {
+    switch (currentTab) {
+      case 'Home':
+        return <Home />;
+      case 'Research':
+        return <Research />;
+      case 'Projects':
+        return <Projects />;
+      case 'Blog':
+        return <Blog />;
+      case 'Personal':
+        return <Personal />;
+      case 'CV':
+        return <CV />;
+      case 'Contact':
+        return <Contact />;
+      default:
+        return <Home />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+      <Navbar
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+        isDark={isDark}
+        toggleTheme={() => setIsDark(!isDark)}
+      />
+      <main className="animate-fadeIn">
+        {renderContent()}
+      </main>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Contents of ._App.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of main.tsx:
+```
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+```
+
+Contents of ._main.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of index.css:
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+```
+
+Contents of ._index.css:
+```
+[Could not decode file contents]
+
+```
+
+Contents of ._components:
+```
+[Could not decode file contents]
+
+```
+
+Contents of vite-env.d.ts:
+```
+/// <reference types="vite/client" />
+
+```
+
+Contents of ._vite-env.d.ts:
+```
+[Could not decode file contents]
+
+```
+
+Contents of ._assets:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Projects.tsx:
+```
+import React from 'react';
+import { ExternalLink, Github, Star } from 'lucide-react';
+
+export default function Projects() {
+  const projects = [
+    {
+      title: "E-commerce Platform",
+      description: "A full-stack e-commerce solution built with React, Node.js, and MongoDB",
+      image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=400",
+      tags: ["React", "Node.js", "MongoDB", "Redux"],
+      stars: 245,
+      link: "#",
+      github: "#"
+    },
+    {
+      title: "AI Chat Application",
+      description: "Real-time chat app with AI-powered responses and language translation",
+      image: "https://images.unsplash.com/photo-1587560699334-cc4ff634909a?auto=format&fit=crop&q=80&w=400",
+      tags: ["TypeScript", "WebSocket", "OpenAI", "Firebase"],
+      stars: 189,
+      link: "#",
+      github: "#"
+    },
+    {
+      title: "Portfolio Generator",
+      description: "Dynamic portfolio generator with customizable themes and components",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
+      tags: ["React", "Tailwind", "NextJS"],
+      stars: 156,
+      link: "#",
+      github: "#"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Featured Projects
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <div
+              key={project.title}
+              className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="relative group">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                  <div className="flex space-x-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <a
+                      href={project.link}
+                      className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
+                      aria-label="View live demo"
+                    >
+                      <ExternalLink className="h-5 w-5 text-gray-900" />
+                    </a>
+                    <a
+                      href={project.github}
+                      className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
+                      aria-label="View source code"
+                    >
+                      <Github className="h-5 w-5 text-gray-900" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xl font-semibold">{project.title}</h3>
+                  <div className="flex items-center text-yellow-500">
+                    <Star className="h-4 w-4 fill-current" />
+                    <span className="ml-1 text-sm">{project.stars}</span>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._Projects.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Navbar.tsx:
+```
+import React from 'react';
+import { Menu, X, Github, Moon, Sun } from 'lucide-react';
+
+interface NavbarProps {
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
+export default function Navbar({ currentTab, setCurrentTab, isDark, toggleTheme }: NavbarProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const tabs = ['Home', 'Research', 'Projects', 'Blog', 'Personal', 'CV', 'Contact'];
+
+  return (
+    <nav className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 border-b border-gray-200 dark:border-gray-700">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <Github className="h-8 w-8 text-gray-900 dark:text-white" />
+          </div>
+          
+          <div className="hidden md:block">
+            <div className="flex items-center space-x-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setCurrentTab(tab)}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    currentTab === tab
+                      ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                      : 'text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+            
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              >
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => {
+                  setCurrentTab(tab);
+                  setIsOpen(false);
+                }}
+                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${
+                  currentTab === tab
+                    ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                    : 'text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
+```
+
+Contents of components/._Navbar.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/._forms:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Home.tsx:
+```
+import React, { useState, useEffect } from 'react';
+import profileImage from '../assets/running101k.jpeg';
+import homeAdd1 from '../assets/home_page_add1.jpg';
+import homeAdd2 from '../assets/home_page_add2.jpg';
+import homeAdd3 from '../assets/home_page_add3.jpg';
+import homeAdd4 from '../assets/home_page_add4.jpeg';
+import homeAdd5 from '../assets/home_page_add5.png';
+import homeAdd6 from '../assets/home_page_add6.jpg';
+import { 
+  Blocks, 
+  GitFork, 
+  GraduationCap, 
+  GitBranch,
+  X,
+  ChevronLeft, 
+  ChevronRight
+} from 'lucide-react';
+
+export default function Home() {
+  const [dialogContent, setDialogContent] = useState(null);
+  const [showGallery, setShowGallery] = useState(false);
+  const [showCircularImages, setShowCircularImages] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 1024); // Adjust breakpoint as needed
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  const additionalImages = [
+    // Left side images
+    { src: homeAdd1, position: '-left-28 top-1/3' },      // Far left
+    { src: homeAdd2, position: '-left-16 top-1/2' },      // Middle left
+    { src: homeAdd3, position: '-left-24 top-2/3' },      // Lower left
+    
+    // Right side images
+    { src: homeAdd4, position: '-right-28 top-1/3' },     // Far right
+    { src: homeAdd5, position: '-right-16 top-1/2' },     // Middle right
+    { src: homeAdd6, position: '-right-24 top-2/3' }      // Lower right
+  ];
+
+  const handleImageClick = () => {
+    if (isSmallScreen) {
+      setShowGallery(true);
+    } else {
+      setShowCircularImages(!showCircularImages);
+    }
+  };
+
+
+  const statsData = [
+    {
+      title: 'Projects',
+      value: '50+',
+      details: [
+        { label: 'Active Projects', value: '12' },
+        { label: 'Completed', value: '38' },
+        { label: 'Open Source', value: '15' },
+        { label: 'Private', value: '35' }
+      ],
+      icon: (
+        <Blocks className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+      )
+    },
+    {
+      title: 'Contributions',
+      value: '1000+',
+      details: [
+        { label: 'Code Reviews', value: '450+' },
+        { label: 'Pull Requests', value: '320' },
+        { label: 'Issues Resolved', value: '230' },
+        { label: 'Documentation', value: '100+' }
+      ],
+      icon: (
+        <GitFork className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+      )
+    },
+    {
+      title: 'Experience',
+      value: '4+ years',
+      details: [
+        { 
+          institution: 'UAntwerp',
+          degree: 'Bachelor in Biochemistry and Biotechnology',
+          duration: '3 years',
+          achievements: ['Top 5% of class', 'Research Assistant']
+        },
+        {
+          institution: 'KU Leuven',
+          degree: 'Master of Bioinformatics',
+          duration: '2 years',
+          achievements: ['Thesis: AI in Genomics', 'Published paper']
+        },
+        {
+          institution: 'PhD Candidate',
+          degree: 'Bioscience and Electrical Engineering',
+          duration: '4+ years',
+          achievements: ['Multiple publications', 'Conference speaker']
+        }
+      ],
+      icon: (
+        <GraduationCap className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+      )
+    },
+    {
+      title: 'Repositories',
+      value: '31',
+      details: [
+        { platform: 'GitHub', count: '7', topLangs: ['Python', 'JavaScript', 'R'] },
+        { platform: 'GitLab', count: '24', topLangs: ['TypeScript', 'Python', 'Java'] }
+      ],
+      icon: (
+        <GitBranch className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+      )
+    }
+  ];
+
+  const ImageGallery = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[60] p-4">
+      <div className="relative w-full max-w-4xl mx-auto">
+        <button
+          onClick={() => setShowGallery(false)}
+          className="absolute top-4 right-4 text-white p-2 rounded-full hover:bg-white/10 transition-colors z-50"
+        >
+          <X className="h-6 w-6" />
+        </button>
+        
+        <div className="relative">
+          <img
+            src={additionalImages[currentImageIndex].src}
+            alt={`Gallery image ${currentImageIndex + 1}`}
+            className="w-full h-auto max-h-[80vh] object-contain"
+          />
+          
+          <button
+            onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? additionalImages.length - 1 : prev - 1))}
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <ChevronLeft className="h-6 w-6 text-white" />
+          </button>
+          
+          <button
+            onClick={() => setCurrentImageIndex((prev) => (prev === additionalImages.length - 1 ? 0 : prev + 1))}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <ChevronRight className="h-6 w-6 text-white" />
+          </button>
+        </div>
+        
+        <div className="flex justify-center mt-4 gap-2">
+          {additionalImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                currentImageIndex === index ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderDialogContent = (content) => {
+    if (Array.isArray(content)) {
+      return (
+        <div className="space-y-4">
+          {content.map((item, index) => {
+            if (item.institution) {
+              return (
+                <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+                  <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{item.institution}</h4>
+                  <p className="text-gray-700 dark:text-gray-300">{item.degree}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.duration}</p>
+                  <ul className="mt-2 list-disc list-inside">
+                    {item.achievements.map((achievement, i) => (
+                      <li key={i} className="text-gray-600 dark:text-gray-400">{achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            } else if (item.platform) {
+              return (
+                <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+                  <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{item.platform}</h4>
+                  <p className="text-gray-700 dark:text-gray-300">Repositories: {item.count}</p>
+                  <div className="mt-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Top Languages:</span>
+                    <div className="flex gap-2 mt-1">
+                      {item.topLangs.map((lang, i) => (
+                        <span key={i} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm">
+                          {lang}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            } else {
+              return (
+                <div key={index} className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+                  <span className="text-gray-700 dark:text-gray-300">{item.label}</span>
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">{item.value}</span>
+                </div>
+              );
+            }
+          })}
+        </div>
+      );
+    }
+    return <p className="text-gray-700 dark:text-gray-300">{content}</p>;
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center p-4 pt-16"> {/* Reduced top padding */}
+      {/* Profile Picture with circular images */}
+      <div className="relative w-96 h-72 flex items-center justify-center mb-6"> {/* Reduced height and margin */}
+        {/* Additional circular images */}
+        {showCircularImages && !isSmallScreen && (
+          <>
+            {additionalImages.map((img, index) => (
+              <div
+                key={index}
+                className={`absolute w-28 h-28 ${img.position} transition-all duration-500 transform cursor-pointer
+                  hover:scale-110 hover:z-30 hidden lg:block`} // Hide on small screens
+                onClick={() => {
+                  setCurrentImageIndex(index);
+                  setShowGallery(true);
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-600 to-purple-600 rounded-[40%] blur opacity-75" />
+                <img
+                  src={img.src}
+                  alt={`Profile ${index + 1}`}
+                  className="w-full h-full object-cover rounded-[40%] relative z-10 border-2 border-white dark:border-gray-800"
+                />
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* Main profile picture */}
+        <div 
+          className="relative group cursor-pointer z-20" 
+          onClick={handleImageClick}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-600 to-purple-600 rounded-[40%] blur opacity-75" />
+          <img
+            src={profileImage}
+            alt="Profile"
+            className="w-64 h-64 object-cover relative z-10 rounded-[40%] object-top border-2 border-white dark:border-gray-800"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 rounded-[40%] z-20 flex items-center justify-center">
+            <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {isSmallScreen ? 'View Gallery' : (showCircularImages ? 'Hide Images' : 'Show More')}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Name and Description */}
+      <h1 className="mt-4 text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        Jaldert François
+      </h1>
+
+      <p className="mt-1 text-lg text-gray-500 dark:text-gray-400">
+        LegallyOverworked
+      </p>
+
+      <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 text-center max-w-xl">
+        Bioinformatician and Deep Learning Researcher passionate about prediction models to solve real-world problems
+      </p>
+
+      {/* Stats Grid */}
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-4xl">
+        {statsData.map(({ title, value, details, icon }) => (
+          <div
+            key={title}
+            onClick={() => setDialogContent(details)}
+            className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400">
+                {title}
+              </h3>
+              {icon}
+            </div>
+            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+              {value}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Enhanced Dialog for Details */}
+      {dialogContent && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setDialogContent(null)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Details
+              </h3>
+              <button
+                onClick={() => setDialogContent(null)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            {renderDialogContent(dialogContent)}
+          </div>
+        </div>
+      )}
+
+      {/* Image Gallery Modal */}
+      {showGallery && <ImageGallery />}
+    </div>
+  );
+}
+```
+
+Contents of components/._Home.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Contact.tsx:
+```
+import React from 'react';
+import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { ContactForm } from './forms/ContactForm';
+import { ContactInfo } from './cards/ContactInfo';
+
+export default function Contact() {
+  const contactInfo = {
+    email: "john@example.com",
+    phone: "+1 (555) 123-4567",
+    location: "San Francisco, CA"
+  };
+
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Get in Touch
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <ContactInfo {...contactInfo} />
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._Contact.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/._cards:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Research.tsx:
+```
+import React from 'react';
+import { BookOpen, Users, FileText, Award } from 'lucide-react';
+import { ResearchCard } from './cards/ResearchCard';
+import { PublicationCard } from './cards/PublicationCard';
+
+export default function Research() {
+  const publications = [
+    {
+      title: "Deep Learning in Edge Computing: A Comprehensive Survey",
+      journal: "IEEE Transactions on Neural Networks",
+      year: 2023,
+      citations: 45,
+      link: "#"
+    },
+    {
+      title: "Efficient Resource Allocation in Cloud-Native Applications",
+      journal: "ACM Computing Surveys",
+      year: 2022,
+      citations: 32,
+      link: "#"
+    }
+  ];
+
+  const researchAreas = [
+    {
+      title: "Machine Learning",
+      description: "Focus on deep learning, neural networks, and AI optimization",
+      icon: BookOpen
+    },
+    {
+      title: "Cloud Computing",
+      description: "Research on distributed systems and cloud-native architectures",
+      icon: Users
+    },
+    {
+      title: "Edge Computing",
+      description: "Exploring efficient computing at the network edge",
+      icon: FileText
+    }
+  ];
+
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Research Work
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {researchAreas.map((area) => (
+            <ResearchCard key={area.title} {...area} />
+          ))}
+        </div>
+
+        <h3 className="text-2xl font-bold mb-6 flex items-center">
+          <Award className="h-6 w-6 mr-2 text-blue-600" />
+          Publications
+        </h3>
+
+        <div className="space-y-6">
+          {publications.map((pub) => (
+            <PublicationCard key={pub.title} {...pub} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._Research.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Blog.tsx:
+```
+import React from 'react';
+import { Calendar, Clock, Tag } from 'lucide-react';
+import { BlogCard } from './cards/BlogCard';
+
+export default function Blog() {
+  const posts = [
+    {
+      title: "Understanding React Server Components",
+      excerpt: "A deep dive into the next evolution of React components and how they can improve your application's performance.",
+      date: "2024-03-15",
+      readTime: "8 min read",
+      tags: ["React", "Performance", "Web Development"],
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=800",
+      slug: "understanding-react-server-components"
+    },
+    {
+      title: "The Future of Web Development",
+      excerpt: "Exploring upcoming trends and technologies that will shape the future of web development.",
+      date: "2024-03-10",
+      readTime: "6 min read",
+      tags: ["Web Development", "Future Tech", "Trends"],
+      image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&q=80&w=800",
+      slug: "future-of-web-development"
+    },
+    {
+      title: "Mastering TypeScript Generics",
+      excerpt: "A comprehensive guide to understanding and effectively using TypeScript generics in your projects.",
+      date: "2024-03-05",
+      readTime: "10 min read",
+      tags: ["TypeScript", "Programming", "Tutorial"],
+      image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800",
+      slug: "mastering-typescript-generics"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Blog
+        </h2>
+
+        <div className="space-y-8">
+          {posts.map((post) => (
+            <BlogCard key={post.slug} {...post} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._Blog.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/CV.tsx:
+```
+import React from 'react';
+import { Briefcase, GraduationCap, Award, Download } from 'lucide-react';
+
+export default function CV() {
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Curriculum Vitae
+          </h2>
+          <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Download className="h-4 w-4 mr-2" />
+            Download CV
+          </button>
+        </div>
+
+        <div className="space-y-8">
+          {/* Experience Section */}
+          <section>
+            <div className="flex items-center mb-6">
+              <Briefcase className="h-6 w-6 mr-2 text-blue-600" />
+              <h3 className="text-2xl font-semibold">Experience</h3>
+            </div>
+            
+            <div className="space-y-6">
+              {[
+                {
+                  role: "Senior Software Engineer",
+                  company: "Tech Corp",
+                  period: "2020 - Present",
+                  description: "Led development of multiple high-impact projects, mentored junior developers, and implemented best practices."
+                },
+                {
+                  role: "Software Engineer",
+                  company: "StartUp Inc",
+                  period: "2018 - 2020",
+                  description: "Developed and maintained full-stack applications, improved performance by 40%, and implemented CI/CD pipelines."
+                }
+              ].map((job) => (
+                <div
+                  key={job.role}
+                  className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="text-xl font-semibold">{job.role}</h4>
+                      <p className="text-gray-600 dark:text-gray-400">{job.company}</p>
+                    </div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{job.period}</span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">{job.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Education Section */}
+          <section>
+            <div className="flex items-center mb-6">
+              <GraduationCap className="h-6 w-6 mr-2 text-blue-600" />
+              <h3 className="text-2xl font-semibold">Education</h3>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="text-xl font-semibold">BSc in Computer Science</h4>
+                  <p className="text-gray-600 dark:text-gray-400">University of Technology</p>
+                </div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">2014 - 2018</span>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400">
+                Graduated with First Class Honours. Specialized in Software Engineering and Artificial Intelligence.
+              </p>
+            </div>
+          </section>
+
+          {/* Certifications Section */}
+          <section>
+            <div className="flex items-center mb-6">
+              <Award className="h-6 w-6 mr-2 text-blue-600" />
+              <h3 className="text-2xl font-semibold">Certifications</h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                {
+                  name: "AWS Solutions Architect",
+                  issuer: "Amazon Web Services",
+                  year: "2022"
+                },
+                {
+                  name: "Professional Cloud Developer",
+                  issuer: "Google Cloud",
+                  year: "2021"
+                },
+                {
+                  name: "React Advanced Certification",
+                  issuer: "Meta",
+                  year: "2021"
+                },
+                {
+                  name: "MongoDB Developer",
+                  issuer: "MongoDB University",
+                  year: "2020"
+                }
+              ].map((cert) => (
+                <div
+                  key={cert.name}
+                  className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                >
+                  <h4 className="font-semibold">{cert.name}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {cert.issuer} • {cert.year}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._CV.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/Personal.tsx:
+```
+import React from 'react';
+import { Code, Coffee, Book, Music, Plane, Camera } from 'lucide-react';
+
+export default function Personal() {
+  return (
+    <div className="min-h-screen p-4 pt-24">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          About Me
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Background</h3>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              I'm a passionate software engineer with a love for creating elegant solutions to complex problems.
+              With over 5 years of experience in full-stack development, I specialize in React, Node.js, and cloud technologies.
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">Skills</h3>
+            <div className="space-y-2">
+              {[
+                { skill: "Frontend Development", level: 90 },
+                { skill: "Backend Development", level: 85 },
+                { skill: "Cloud Architecture", level: 80 },
+                { skill: "DevOps", level: 75 }
+              ].map(({ skill, level }) => (
+                <div key={skill}>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{skill}</span>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{level}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${level}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <h3 className="text-2xl font-bold mt-12 mb-6">Interests & Hobbies</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { Icon: Code, title: "Coding", desc: "Building side projects" },
+            { Icon: Coffee, title: "Coffee", desc: "Third wave coffee enthusiast" },
+            { Icon: Book, title: "Reading", desc: "Tech & science fiction" },
+            { Icon: Music, title: "Music", desc: "Playing guitar & piano" },
+            { Icon: Plane, title: "Travel", desc: "Exploring new cultures" },
+            { Icon: Camera, title: "Photography", desc: "Street & landscape" }
+          ].map(({ Icon, title, desc }) => (
+            <div
+              key={title}
+              className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <Icon className="h-6 w-6 mb-2 text-blue-600" />
+              <h4 className="font-semibold mb-1">{title}</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/._Personal.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/forms/ContactForm.tsx:
+```
+import React from 'react';
+import { Send } from 'lucide-react';
+
+export function ContactForm() {
+  return (
+    <form className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+      <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
+      
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+            placeholder="Your name"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+            placeholder="your@email.com"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Message
+          </label>
+          <textarea
+            id="message"
+            rows={4}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+            placeholder="Your message..."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Send className="h-4 w-4 mr-2" />
+          Send Message
+        </button>
+      </div>
+    </form>
+  );
+}
+```
+
+Contents of components/forms/._ContactForm.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/cards/BlogCard.tsx:
+```
+import React from 'react';
+import { Calendar, Clock, Tag } from 'lucide-react';
+
+interface BlogCardProps {
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  image: string;
+  slug: string;
+}
+
+export function BlogCard({ title, excerpt, date, readTime, tags, image, slug }: BlogCardProps) {
+  return (
+    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+      <div className="md:flex">
+        <div className="md:w-1/3">
+          <img
+            src={image}
+            alt={title}
+            className="h-48 w-full object-cover md:h-full"
+          />
+        </div>
+        <div className="p-6 md:w-2/3">
+          <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">
+            <a href={`/blog/${slug}`}>{title}</a>
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{excerpt}</p>
+          
+          <div className="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 gap-4">
+            <div className="flex items-center">
+              <Calendar className="h-4 w-4 mr-1" />
+              {new Date(date).toLocaleDateString()}
+            </div>
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-1" />
+              {readTime}
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 dark:bg-gray-700"
+              >
+                <Tag className="h-3 w-3 mr-1" />
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+```
+
+Contents of components/cards/._BlogCard.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/cards/ContactInfo.tsx:
+```
+import React from 'react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+
+interface ContactInfoProps {
+  email: string;
+  phone: string;
+  location: string;
+}
+
+export function ContactInfo({ email, phone, location }: ContactInfoProps) {
+  return (
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+      <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
+      
+      <div className="space-y-4">
+        <div className="flex items-center">
+          <Mail className="h-5 w-5 text-blue-600 mr-3" />
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
+            <p className="text-gray-900 dark:text-gray-100">{email}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center">
+          <Phone className="h-5 w-5 text-blue-600 mr-3" />
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Phone</p>
+            <p className="text-gray-900 dark:text-gray-100">{phone}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center">
+          <MapPin className="h-5 w-5 text-blue-600 mr-3" />
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
+            <p className="text-gray-900 dark:text-gray-100">{location}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/cards/._ContactInfo.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/cards/PublicationCard.tsx:
+```
+import React from 'react';
+import { FileText, ExternalLink } from 'lucide-react';
+
+interface PublicationCardProps {
+  title: string;
+  journal: string;
+  year: number;
+  citations: number;
+  link: string;
+}
+
+export function PublicationCard({ title, journal, year, citations, link }: PublicationCardProps) {
+  return (
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <h4 className="text-xl font-semibold mb-2">{title}</h4>
+          <p className="text-gray-600 dark:text-gray-400 mb-2">{journal} • {year}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Citations: {citations}</p>
+        </div>
+        <a
+          href={link}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          aria-label="View publication"
+        >
+          <ExternalLink className="h-5 w-5" />
+        </a>
+      </div>
+    </div>
+  );
+}
+```
+
+Contents of components/cards/._PublicationCard.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of components/cards/ResearchCard.tsx:
+```
+import React from 'react';
+import { LucideIcon } from 'lucide-react';
+
+interface ResearchCardProps {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+export function ResearchCard({ title, description, icon: Icon }: ResearchCardProps) {
+  return (
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+      <Icon className="h-8 w-8 text-blue-600 mb-4" />
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <p className="text-gray-600 dark:text-gray-400">{description}</p>
+    </div>
+  );
+}
+```
+
+Contents of components/cards/._ResearchCard.tsx:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/closeup_diffusion.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/._closeup_diffusion.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/running101k.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/._running101k.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/running101klookaway.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/._running101klookaway.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/legallyoverworked_pic.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/._legallyoverworked_pic.jpeg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add5.png:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add6.jpg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add1.jpg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add2.jpg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add3.jpg:
+```
+[Could not decode file contents]
+
+```
+
+Contents of assets/home_page_add4.jpeg:
+```
+[Could not decode file contents]
+
+```
+
