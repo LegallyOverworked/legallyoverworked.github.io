@@ -41,11 +41,11 @@ export default function CombinedPage() {
             <div className="space-y-2">
               {[
                 { skill: "Bioinformatics", level: 100 },
-                { skill: "Machine Learning & Deep Learning", level: 85 },
-                { skill: "Statistical Analysis", level: 75 },
-                { skill: "Backend Development", level: 75 },
-                { skill: "Database Design", level: 65 },
-                { skill: "Frontend Development", level: 40},
+                { skill: "Machine Learning & Deep Learning", level: 100 },
+                { skill: "Statistical Analysis", level: 90 },
+                { skill: "Backend Development", level: 85 },
+                { skill: "Database Design", level: 85 },
+                { skill: "Frontend Development", level: 75},
                 { skill: "Effort, Enthusiasm, Positive Attitude & Humor", level: 105}
               ].map(({ skill, level }) => (
                 <div key={skill}>
