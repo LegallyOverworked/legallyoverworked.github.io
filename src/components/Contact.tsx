@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import closeupDiffusion from '../assets/closeup_diffusion.jpeg';
+import closeupDiffusion from '../assets/closeup_diffusion.png';
 import { Mail, MapPin, Phone, Send, Copy, Github, Gitlab, Linkedin, Twitter, Facebook, Instagram, Smile, X } from 'lucide-react';
 
 // Data Structure Definitions
@@ -277,20 +277,7 @@ export default function Contact() {
     return true;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Determine the final code: use customCode if "custom" selected
-    const finalCode = selectedCode === 'custom' ? customCode : selectedCode;
 
-    if (validateEmail(formData.email) && formData.name && formData.message) {
-      const submissionData = {
-        ...formData,
-        countryCode: finalCode
-      };
-      console.log('Form submitted:', submissionData);
-      // Add your submission logic here
-    }
-  };
 
   return (
     <div className="min-h-screen p-4 pt-24">

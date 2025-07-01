@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, X, Moon, Sun } from 'lucide-react';
-import closeupDiffusion from '../assets/closeup_diffusion.jpeg';
+import closeupDiffusion from '../assets/closeup_diffusion.png';
 
 interface NavbarProps {
   currentTab: string;
