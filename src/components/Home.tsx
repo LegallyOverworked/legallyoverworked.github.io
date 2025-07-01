@@ -3,8 +3,8 @@ import profileImage from '../assets/running101k.jpeg';
 import homeAdd1 from '../assets/home_page_add1.jpg';
 import homeAdd2 from '../assets/home_page_add2.jpg';
 import homeAdd3 from '../assets/home_page_add3.jpg';
-import homeAdd4 from '../assets/home_page_add4.jpeg';
-import homeAdd5 from '../assets/home_page_add5.png';
+import homeAdd4 from '../assets/home_page_add4.jpg';
+import homeAdd5 from '../assets/home_page_add5.jpg';
 import homeAdd6 from '../assets/home_page_add6.jpg';
 import { 
   Blocks, 
@@ -15,6 +15,8 @@ import {
   ChevronLeft, 
   ChevronRight
 } from 'lucide-react';
+import { MolecularNavBar } from './MolecularNavBar';
+import BackgroundEffects from './BackgroundEffects';
 
 type DialogContent = Array<{
   label?: string;
@@ -34,7 +36,10 @@ export default function Home() {
   const [showGallery, setShowGallery] = useState(false);
   const [showCircularImages, setShowCircularImages] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+    type IconCategory = 'DNA' | 'Proteins' | 'Enzymes' | 'AI';
+  const [activeTab, setActiveTab] = useState<IconCategory>('DNA');
+  const categories: IconCategory[] = ['DNA', 'Proteins', 'Enzymes', 'AI'];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -241,7 +246,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-4 pt-16">
+    <div className="relative min-h-screen flex flex-col items-center p-4 pt-16 overflow-hidden">
+      <BackgroundEffects activeTab={activeTab} />
+      <MolecularNavBar 
+        active={categories.indexOf(activeTab)}
+        onActiveChange={(index) => setActiveTab(categories[index])}
+      />
+
       <div className="relative w-96 h-72 flex items-center justify-center mb-6">
         {showCircularImages && !isSmallScreen && (
           <>
@@ -303,19 +314,22 @@ export default function Home() {
           <div
             key={title}
             onClick={() => setDialogContent(details)}
-            className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
+            className="relative group cursor-pointer"
             role="button"
             aria-label={`View ${title} details`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400">
-                {title}
-              </h3>
-              {icon}
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
+            <div className="relative p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400">
+                  {title}
+                </h3>
+                {icon}
+              </div>
+              <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                {value}
+              </p>
             </div>
-            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
-              {value}
-            </p>
           </div>
         ))}
       </div>
