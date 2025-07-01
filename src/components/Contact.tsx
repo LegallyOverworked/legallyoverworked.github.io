@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import closeupDiffusion from '../assets/closeup_diffusion.jpeg';
 import { Mail, MapPin, Phone, Send, Copy, Github, Gitlab, Linkedin, Twitter, Facebook, Instagram, Smile, X } from 'lucide-react';
 
 // Data Structure Definitions
@@ -298,20 +299,7 @@ export default function Contact() {
           <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mr-4">
             Get in Touch
           </h2>
-          <img src="src/assets/closeup_diffusion.jpeg" alt="Closeup Diffusion" className="w-10 h-10 rounded-full" />
-        </div>
-
-        {/* Welcome Message */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-8">
-          <h3 className="text-xl font-semibold mb-4">Welcome!</h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            I am always interested in hearing about new opportunities, collaborations, or just connecting with fellow researchers and developers. Anything to do with bioinformatics, applied deep learning, statistics or software development. Feel free to reach out through any of the channels below or send me a direct message!
-            <br />
-            <strong>
-              In Leuven and you like running? Please reach out for a fun run together! 😊
-            </strong>
-          </p>
-
+          <img src={closeupDiffusion} alt="Closeup Diffusion" className="w-10 h-10 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -355,90 +343,17 @@ export default function Contact() {
             </button>
           </div>
 
-          {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Your name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              />
-              
-              <div>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={(e) => {
-                    setFormData({ ...formData, email: e.target.value });
-                    validateEmail(e.target.value);
-                  }}
-                  className={`w-full px-4 py-2 rounded-lg border ${
-                    emailError ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                  } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none`}
-                  required
-                />
-                {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex space-x-2">
-                  <select
-                    value={selectedCode}
-                    onChange={(e) => setSelectedCode(e.target.value)}
-                    className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-                  >
-                    {countryCodes.map(({ code, country }) => (
-                      <option key={code} value={code}> 
-                        {country} ({code})
-                      </option>
-                    ))}
-                    <option value="custom">Custom</option>
-                  </select>
-                  <input
-                    type="tel"
-                    placeholder="Phone (optional)"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-                {selectedCode === 'custom' && (
-                  <input
-                    type="text"
-                    placeholder="Enter custom code (e.g. +999)"
-                    value={customCode}
-                    onChange={(e) => setCustomCode(e.target.value)}
-                    className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                )}
-              </div>
-
-              <textarea
-                rows={4}
-                placeholder="Your message..."
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-                required
-              ></textarea>
-
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity relative group"
-              >
-                <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
-                <Send className="h-4 w-4 mr-2 relative" />
-                <span className="relative">Send Message</span>
-              </button>
-            </div>
-          </form>
+          {/* Welcome Box (side by side) */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center">
+            <h3 className="text-xl font-semibold mb-4">Welcome!</h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              I am always interested in hearing about new opportunities, collaborations, or just connecting with fellow researchers and developers. Anything to do with bioinformatics, applied deep learning, statistics or software development. Feel free to reach out through any of the channels below or send me a direct message!
+              <br />
+              <strong>
+                In Leuven and you like running? Please reach out for a fun run together! 😊
+              </strong>
+            </p>
+          </div>
         </div>
 
         {/* Social Links Bar */}
