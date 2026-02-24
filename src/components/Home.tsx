@@ -50,10 +50,10 @@ export default function Home() {
   }, []);
 
   const additionalImages = [
-    { src: homeAdd1, position: '-left-28 top-1/3' },
-    { src: homeAdd2, position: '-left-16 top-1/2' },
-    { src: homeAdd3, position: '-left-24 top-2/3' },
-    { src: homeAdd5, position: '-right-16 top-1/2' },
+    { src: homeAdd1, position: '-left-28 top-1/4' },
+    { src: homeAdd2, position: '-left-20 top-2/3' },
+    { src: homeAdd3, position: '-right-28 top-1/4' },
+    { src: homeAdd5, position: '-right-20 top-2/3' },
   ];
 
   const handleImageClick = () => {

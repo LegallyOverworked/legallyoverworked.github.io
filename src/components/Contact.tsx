@@ -295,21 +295,6 @@ export default function Contact() {
             <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
             
             <div className="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
-              <Globe className="h-5 w-5 text-blue-600 mr-3" />
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Website</p>
-                <a
-                  href="https://www.jaldertfrancois.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  www.jaldertfrancois.org
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
               <Linkedin className="h-5 w-5 text-blue-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">LinkedIn</p>
@@ -360,15 +345,11 @@ export default function Contact() {
             </button>
           </div>
 
-          {/* Welcome Box (side by side) */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center">
-            <h3 className="text-xl font-semibold mb-4">Welcome!</h3>
+          {/* Collaboration CTA */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center border border-blue-100 dark:border-gray-700">
+            <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Let's Collaborate</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              I am always interested in hearing about new opportunities, collaborations, or just connecting with fellow researchers and developers. Anything to do with bioinformatics, applied machine learning, data science, database development or software engineering. Feel free to reach out through any of the channels below or send me a direct message!
-              <br />
-              <strong>
-                In Leuven and you like running? Please reach out for a fun run together! 😊
-              </strong>
+              Always open to exciting collaborations and new projects, whether it's applied ML, bioinformatics, data engineering, or building something entirely new. If you have an interesting idea, let's make it happen.
             </p>
           </div>
         </div>
