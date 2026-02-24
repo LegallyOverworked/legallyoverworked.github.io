@@ -6,7 +6,6 @@ export default function Blog() {
   const posts = [
     {
       title: "Advances in Large Language Models",
-      excerpt: "Description coming soon",
       date: "2024-03-15",
       readTime: "8 min read",
       tags: ["LLM", "NLP", "Machine Learning"],
@@ -15,7 +14,6 @@ export default function Blog() {
     },
     {
       title: "Efficient LLM Fine-Tuning Techniques",
-      excerpt: "Description coming soon",
       date: "2024-03-10",
       readTime: "6 min read",
       tags: ["Computer Vision", "PyTorch", "Deep Learning"],
@@ -24,7 +22,6 @@ export default function Blog() {
     },
     {
       title: "A guide to Machine Learning normalization",
-      excerpt: "Description coming soon",
       date: "2024-03-05",
       readTime: "10 min read",
       tags: ["R", "Machine Learning", "Data Science"],
@@ -33,7 +30,6 @@ export default function Blog() {
     },
     {
       title: "The Psychology of Likability",
-      excerpt: "Description coming soon",
       date: "2024-03-01",
       readTime: "5 min read",
       tags: ["Psychology", "Behavioral Science"],
@@ -46,7 +42,7 @@ export default function Blog() {
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Coming Soon
+          Blogs & Writings
         </h2>
 
         <div className="space-y-8">

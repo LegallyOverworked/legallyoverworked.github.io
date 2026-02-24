@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, X, Moon, Sun } from 'lucide-react';
-import closeupDiffusion from '../assets/closeup_diffusion.png';
+import siteIcon from '../assets/icon.png';
 
 interface NavbarProps {
   currentTab: string;
@@ -20,7 +20,7 @@ export default function Navbar({ currentTab, setCurrentTab, isDark, toggleTheme 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">
           <div className="flex items-center space-x-3">
-  <img src={closeupDiffusion} alt="Site Icon" className="h-8 w-8 rounded-full" />
+  <img src={siteIcon} alt="Site Icon" className="h-8 w-8 rounded-full" />
   <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Jaldert François</span>
 </div>
           
@@ -85,6 +85,11 @@ export default function Navbar({ currentTab, setCurrentTab, isDark, toggleTheme 
           </div>
         </div>
       )}
+
+      {/* Maintenance banner */}
+      <div className="w-full bg-red-600 text-white text-center text-sm py-1.5 font-medium">
+        Under maintenance, working on an update! Keep tuned for the changes!
+      </div>
     </nav>
   );
 }

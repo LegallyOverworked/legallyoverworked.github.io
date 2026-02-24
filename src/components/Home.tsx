@@ -3,9 +3,7 @@ import profileImage from '../assets/running101k.jpeg';
 import homeAdd1 from '../assets/home_page_add1.jpg';
 import homeAdd2 from '../assets/home_page_add2.jpg';
 import homeAdd3 from '../assets/home_page_add3.jpg';
-import homeAdd4 from '../assets/home_page_add4.jpg';
 import homeAdd5 from '../assets/home_page_add5.jpg';
-import homeAdd6 from '../assets/home_page_add6.jpg';
 import { 
   Blocks, 
   GitFork, 
@@ -55,9 +53,7 @@ export default function Home() {
     { src: homeAdd1, position: '-left-28 top-1/3' },
     { src: homeAdd2, position: '-left-16 top-1/2' },
     { src: homeAdd3, position: '-left-24 top-2/3' },
-    { src: homeAdd4, position: '-right-28 top-1/3' },
     { src: homeAdd5, position: '-right-16 top-1/2' },
-    { src: homeAdd6, position: '-right-24 top-2/3' }
   ];
 
   const handleImageClick = () => {
@@ -102,22 +98,22 @@ export default function Home() {
       details: [
         { 
           institution: 'UAntwerp',
-          degree: 'Biochemistry and Biotechnology, Bsc',
+          degree: 'Biochemistry and Biotechnology, BSc',
           duration: '3 years (2016-2019)',
-          achievements: ['Honours College (2017-2019)', 'Research Internship (2018)']
+          achievements: ['Summa Cum Laude', 'Honours College (2017-2019)', 'Research Internship (2018)']
         },
         {
           institution: 'KU Leuven',
-          degree: 'Bioinformatics, Msc',
+          degree: 'Bioinformatics, MSc',
           duration: '2 years (2019-2021)',
-          achievements: ['Thesis: statistical analysis of Bacterial genomes']
+          achievements: ['Cum Laude', 'Thesis: Exploring mutational patterns of evolution experiments']
         },
         {
           institution: 'PhD Candidate @KU Leuven',
           degree: '@Bioscience Engineering (CMPG) @Electrical Engineering (ESAT)',
           duration: '4+ years (2021-present)',
-          topic: 'Computational enzyme annotation: deep learning for protein function prediction & protein engineering',
-          achievements: ['Applied Deep Learning', 'Large Language Models', 'Predictive Modelling', 'Database Design', 'Software Engineering']
+          topic: 'Computational enzyme annotation: AI-driven enzyme discovery through ML for classification, parameter prediction and protein engineering',
+          achievements: ['Applied Deep Learning & PEFT', 'Protein Language Models (ESM-2, ProtTrans)', 'SOTA Predictive Models', 'Full-stack Platform Engineering', 'Database Design', 'Teaching']
         }
       ],
       icon: (
@@ -305,8 +301,12 @@ export default function Home() {
         LegallyOverworked
       </p>
 
-      <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 text-center max-w-xl">
-        Bioinformatician and Deep Learning Researcher passionate about prediction models to solve real-world problems
+      <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 text-center max-w-xl font-medium">
+        PhD Candidate | Applied Machine Learning, Bioinformatics, Data Science and Database Development
+      </p>
+
+      <p className="mt-2 text-base text-gray-500 dark:text-gray-500 text-center max-w-xl">
+        Bioinformatician (M.Sc.) and PhD researcher building end-to-end ML pipelines and scientific software tools for computational protein engineering
       </p>
 
       <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-4xl">

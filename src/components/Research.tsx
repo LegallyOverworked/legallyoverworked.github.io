@@ -7,11 +7,11 @@ export default function Research() {
   const projects = [
     {
       title: "Enzymares Project",
-      journal: "Catalisti Project (2021-2024)",
-      year: 2024,
+      journal: "Catalisti/UGent Marine Project (2021-2025)",
+      year: 2025,
       citations: 0,
-      link: "https://catalisti.be/project/enzymares/",
-      description: "Development of a toolbox for enzyme selection, including custom database integration and ML models for enzyme parameter prediction"
+      link: "https://www.ugent.be/marine/en/partnerships/enzymares",
+      description: "End-to-end enzyme selection platform for industry: unified multi-source database at thousands of sequences scale, full-stack annotation toolbox (React.js web app + CLI + Dockerised/Singularity ML backend)"
     },
     {
       title: "Optimising the enzyme discovery pathway through omics integration and AI",
@@ -19,24 +19,24 @@ export default function Research() {
       year: 2026,
       citations: 0,
       link: "#",
-      description: "Research on enzyme classification, reaction parameter prediction, and substrate affinity using machine learning approaches"
+      description: "Competitive national FWO-SB grant advancing AI-driven enzyme discovery: above SOTA temperature and pH optimum prediction, fine-tuned protein language model pipeline for large-scale EC classification"
     }
   ];
 
   const researchAreas = [
     {
       title: "Protein Engineering",
-      description: "Protein/Enzyme Engineering, Proteomics, Computational Protein annotation",
+      description: "Computational protein engineering, enzyme annotation, proteomics — building predictive models for enzyme temperature, pH, EC classification and solubility",
       icon: Microscope
     },
     {
       title: "Machine Learning",
-      description: "Applied Deep Learning (ANN, CNN, GNN), neural network optimisation & LLM fine-tuning",
+      description: "Applied Deep Learning, protein language model fine-tuning (ESM-2, ProtTrans via PEFT/LoRA), population-based training for neural architecture search, imbalanced regression",
       icon: BookOpen
     },
     {
       title: "Data Mining & Databases",
-      description: "Data mining and database development (SQL, NoSQL and Graph databases)",
+      description: "Multi-source relational database design (UniProt, BRENDA, Rhea integration), data mining, SQL — full-stack search interfaces and containerised ML serving pipelines",
       icon: Database
     }
   ];
@@ -44,18 +44,15 @@ export default function Research() {
   return (
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-6xl mx-auto">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-lg mb-8 text-center text-xl font-bold">
-          Update Incoming!
-        </div>
-
         <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Research Work
         </h2>
 
         <div className="mb-8">
           <p className="text-lg text-gray-700 dark:text-gray-300">
-            PhD Candidate in Bioscience Engineering (Bioinformatics) at STADIUS (Engineering) and CSB (Bioscience Engineering), 
-            working on Protein Engineering, Applied Machine Learning and Statistical Analysis.
+            Bioinformatician (M.Sc.) and PhD researcher at STADIUS (Engineering) and CSB (Bioscience Engineering), KU Leuven. 
+            Broad background in applied machine learning, deep learning development, and statistical analysis in life sciences, 
+            with computational protein engineering as the core research topic.
           </p>
         </div>
 
@@ -86,6 +83,8 @@ export default function Research() {
                 <li>R</li>
                 <li>Bash</li>
                 <li>SQL</li>
+                <li>HPC Computing</li>
+                <li>MLOps & DevOps</li>
               </ul>
             </div>
             <div>
@@ -94,6 +93,8 @@ export default function Research() {
                 <li>Deep Learning</li>
                 <li>Neural Networks</li>
                 <li>LLM Fine-tuning</li>
+                <li>PEFT (LoRA)</li>
+                <li>Neural Architecture Search</li>
               </ul>
             </div>
             <div>
