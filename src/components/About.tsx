@@ -1,4 +1,5 @@
 import React from 'react';
+import cvPdf from '../assets/cv_jaldertfrancois.pdf';
 import {
   Code,
   Coffee,
@@ -31,8 +32,8 @@ export default function CombinedPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Background</h3>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              I am a <strong>Bioinformatician (M.Sc.) and PhD researcher</strong> with a broad background in <strong>applied machine learning, deep learning development, and statistical analysis</strong> in life sciences. I have hands-on experience building <strong>end-to-end ML pipelines</strong>, developing <strong>scientific software tools and databases</strong>, with <strong>computational protein engineering</strong> as my core research topic. Also a <strong>running, health and psychology enthusiast</strong> <LucideSmile className="inline h-5 w-5 text-yellow-500" />
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-left">
+              I am a <strong>Bioinformatician (M.Sc.) and PhD researcher</strong> with a broad background in <strong>applied machine learning, deep learning development, and statistical analysis</strong> in life sciences. I have hands-on experience building <strong>end-to-end ML pipelines</strong>, developing <strong>scientific software tools and databases</strong>, with <strong>computational protein engineering</strong> as my core research topic. Passionate about <strong>entrepreneurship</strong> and turning research into real-world impact. Also a <strong>running, health and psychology enthusiast</strong>.
             </p>
           </div>
 
@@ -41,11 +42,11 @@ export default function CombinedPage() {
             <div className="space-y-2">
               {[
                 { skill: "Applied Machine Learning & Deep Learning", level: 100 },
-                { skill: "Bioinformatics", level: 100 },
-                { skill: "Statistical Analysis & Data Science", level: 95 },
-                { skill: "Python, R, SQL, Bash, HPC & MLOps", level: 95 },
-                { skill: "Database Design & Data Mining", level: 90 },
-                { skill: "Software & Platform Engineering", level: 85 },
+                { skill: "Bioinformatics", level: 90 },
+                { skill: "Statistical Analysis & Data Science", level: 90 },
+                { skill: "Python, R, SQL, Bash, HPC & MLOps", level: 85 },
+                { skill: "Database Design & Data Mining", level: 80 },
+                { skill: "Software & Platform Engineering", level: 80 },
                 { skill: "Effort, Enthusiasm, Positive Attitude & Humor", level: 105}
               ].map(({ skill, level }) => (
                 <div key={skill}>
@@ -71,29 +72,14 @@ export default function CombinedPage() {
             Curriculum Vitae
           </h2>
           <div className="flex gap-4">
-            <button 
-              onClick={() => alert("Full CV is currently unavailable")}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Show CV
-            </button>
             <a 
-              href="/cv_JaldertFrancois_short.pdf" 
+              href={cvPdf}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Eye className="h-4 w-4 mr-2" />
-              Show Short CV
-            </a>
-            <a 
-              href="/cv_JaldertFrancois_short.pdf" 
-              download="cv_JaldertFrancois_short.pdf"
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Download Short CV
+              Show CV
             </a>
           </div>
         </div>
