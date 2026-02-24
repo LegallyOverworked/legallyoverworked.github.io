@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import closeupDiffusion from '../assets/closeup_diffusion.png';
-import { Mail, MapPin, Phone, Send, Copy, Github, Gitlab, Linkedin, Twitter, Facebook, Instagram, Smile, X } from 'lucide-react';
+import siteIcon from '../assets/icon.png';
+import { Mail, MapPin, Phone, Send, Copy, Github, Gitlab, Linkedin, Twitter, Facebook, Instagram, Smile, X, Globe } from 'lucide-react';
 
 // Data Structure Definitions
 const countryCodes = [
@@ -286,7 +286,7 @@ export default function Contact() {
           <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mr-4">
             Get in Touch
           </h2>
-          <img src={closeupDiffusion} alt="Closeup Diffusion" className="w-10 h-10 rounded-full" />
+          <img src={siteIcon} alt="Site Icon" className="w-10 h-10 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -294,6 +294,36 @@ export default function Contact() {
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
             <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
             
+            <div className="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
+              <Globe className="h-5 w-5 text-blue-600 mr-3" />
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Website</p>
+                <a
+                  href="https://www.jaldertfrancois.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  www.jaldertfrancois.org
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
+              <Linkedin className="h-5 w-5 text-blue-600 mr-3" />
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">LinkedIn</p>
+                <a
+                  href="https://www.linkedin.com/in/jaldert-fran%C3%A7ois/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  linkedin.com/in/jaldert-françois
+                </a>
+              </div>
+            </div>
+
             <ContactDetails
               icon={Mail}
               label="Email"
@@ -334,7 +364,7 @@ export default function Contact() {
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center">
             <h3 className="text-xl font-semibold mb-4">Welcome!</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              I am always interested in hearing about new opportunities, collaborations, or just connecting with fellow researchers and developers. Anything to do with bioinformatics, applied deep learning, statistics or software development. Feel free to reach out through any of the channels below or send me a direct message!
+              I am always interested in hearing about new opportunities, collaborations, or just connecting with fellow researchers and developers. Anything to do with bioinformatics, applied machine learning, data science, database development or software engineering. Feel free to reach out through any of the channels below or send me a direct message!
               <br />
               <strong>
                 In Leuven and you like running? Please reach out for a fun run together! 😊

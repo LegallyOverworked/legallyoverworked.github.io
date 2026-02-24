@@ -3,7 +3,6 @@ import { Calendar, Clock, Tag } from 'lucide-react';
 
 interface BlogCardProps {
   title: string;
-  excerpt: string;
   date: string;
   readTime: string;
   tags: string[];
@@ -11,22 +10,21 @@ interface BlogCardProps {
   slug: string;
 }
 
-export function BlogCard({ title, excerpt, date, readTime, tags, image, slug }: BlogCardProps) {
+export function BlogCard({ title, date, readTime, tags, image, slug }: BlogCardProps) {
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden opacity-60 pointer-events-none cursor-default select-none">
       <div className="md:flex">
         <div className="md:w-1/3">
           <img
             src={image}
             alt={title}
-            className="h-48 w-full object-cover md:h-full"
+            className="h-48 w-full object-cover md:h-full grayscale"
           />
         </div>
         <div className="p-6 md:w-2/3">
-          <h3 className="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">
-            <a href={`/blog/${slug}`}>{title}</a>
+          <h3 className="text-xl font-semibold mb-2">
+            {title}
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">{excerpt}</p>
           
           <div className="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 gap-4">
             <div className="flex items-center">
