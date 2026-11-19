@@ -57,12 +57,22 @@ async function fetchGitHub(from, to) {
         contributionsCollection(from: $from, to: $to) {
           totalCommitContributions
           restrictedContributionsCount
+          totalPullRequestContributions
+          totalIssueContributions
+          totalPullRequestReviewContributions
+          totalRepositoryContributions
+          commitContributionsByRepository(maxRepositories: 100) { repository { id } }
+          pullRequestContributionsByRepository(maxRepositories: 100) { repository { id } }
+          issueContributionsByRepository(maxRepositories: 100) { repository { id } }
           contributionCalendar {
             totalContributions
             weeks { contributionDays { date contributionCount } }
           }
         }
         repositories(ownerAffiliations: OWNER, isFork: false) { totalCount }
+        publicRepos: repositories(ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC) { totalCount }
+        privateRepos: repositories(ownerAffiliations: OWNER, isFork: false, privacy: PRIVATE) { totalCount }
+        archivedRepos: repositories(ownerAffiliations: OWNER, isFork: false, isArchived: true) { totalCount }
       }
     }`;
 
@@ -82,7 +92,17 @@ async function fetchGitHub(from, to) {
     throw new Error(`GitHub API error: ${payload.errors.map((e) => e.type || 'UNKNOWN').join(', ')}`);
   }
 
-  const { contributionsCollection: collection, repositories } = payload.data.viewer;
+  const viewer = payload.data.viewer;
+  const { contributionsCollection: collection, repositories } = viewer;
+
+  // Opaque repository ids are used only to count distinct projects; they are not stored.
+  const contributedTo = new Set(
+    [
+      ...collection.commitContributionsByRepository,
+      ...collection.pullRequestContributionsByRepository,
+      ...collection.issueContributionsByRepository,
+    ].map((entry) => entry.repository.id),
+  );
   const days = {};
   for (const week of collection.contributionCalendar.weeks) {
     for (const day of week.contributionDays) {
@@ -96,7 +116,17 @@ async function fetchGitHub(from, to) {
     commits: collection.totalCommitContributions,
     privateContributions: collection.restrictedContributionsCount,
     contributions: collection.contributionCalendar.totalContributions,
+    pullRequests: collection.totalPullRequestContributions,
+    issues: collection.totalIssueContributions,
+    reviews: collection.totalPullRequestReviewContributions,
+    newRepos: collection.totalRepositoryContributions,
+    // Repositories that received commits / any contribution (only counts are kept).
+    activeRepos: collection.commitContributionsByRepository.length,
+    activeProjects: contributedTo.size,
     repos: repositories.totalCount,
+    publicRepos: viewer.publicRepos.totalCount,
+    privateRepos: viewer.privateRepos.totalCount,
+    archivedRepos: viewer.archivedRepos.totalCount,
     days,
   };
 }
@@ -115,8 +145,7 @@ async function gitlabGet(path) {
 }
 
 // Mirrors what GitHub counts as a contribution: commits, opened issues/MRs, reviews.
-const GITLAB_COUNTED_TARGETS = new Set(['Issue', 'MergeRequest', 'WorkItem']);
-const GITLAB_COUNTED_ACTIONS = new Set(['opened', 'approved']);
+const GITLAB_ISSUE_TARGETS = new Set(['Issue', 'WorkItem']);
 
 async function fetchGitLab(from, to) {
   const after = isoDay(new Date(from.getTime() - DAY_MS)); // `after` is exclusive
@@ -126,6 +155,11 @@ async function fetchGitLab(from, to) {
   const days = {};
   let commits = 0;
   let contributions = 0;
+  let pullRequests = 0; // merge requests opened
+  let issues = 0;
+  let reviews = 0; // merge request approvals
+  const pushedProjects = new Set(); // ids only, to count projects that received commits
+  const contributedProjects = new Set(); // ids only, to count projects with any contribution
   let page = '1';
   let pages = 0;
 
@@ -146,17 +180,23 @@ async function fetchGitLab(from, to) {
         if (push.ref_type === 'branch' && push.action !== 'removed') {
           count = Number(push.commit_count) || 0;
           commits += count;
+          if (count > 0 && event.project_id != null) pushedProjects.add(event.project_id);
         }
-      } else if (
-        GITLAB_COUNTED_TARGETS.has(event.target_type) &&
-        GITLAB_COUNTED_ACTIONS.has(event.action_name)
-      ) {
+      } else if (event.target_type === 'MergeRequest' && event.action_name === 'opened') {
         count = 1;
+        pullRequests += 1;
+      } else if (event.target_type === 'MergeRequest' && event.action_name === 'approved') {
+        count = 1;
+        reviews += 1;
+      } else if (GITLAB_ISSUE_TARGETS.has(event.target_type) && event.action_name === 'opened') {
+        count = 1;
+        issues += 1;
       }
 
       if (count > 0) {
         days[day] = (days[day] || 0) + count;
         contributions += count;
+        if (event.project_id != null) contributedProjects.add(event.project_id);
       }
     }
 
@@ -164,18 +204,42 @@ async function fetchGitLab(from, to) {
   }
 
   // Projects the token owner can contribute to (Developer role or higher).
-  // Optional: listing projects needs the `read_api` scope, which can also read
-  // code. With a `read_user`-only token this is skipped and the site keeps its
-  // hand-set GitLab repository number.
-  let repos = null;
-  try {
-    const projects = await gitlabGet('/projects?membership=true&min_access_level=30&simple=true&per_page=1');
-    repos = Number(projects.headers.get('x-total')) || null;
-  } catch {
-    console.log('INFO  gitlab: repository count not available with this token scope — skipped');
-  }
+  // Optional: needs the Project: Read permission (legacy tokens: `read_api`).
+  // Without it these counts are skipped and the site keeps its hand-set number.
+  // Only the totals from the response headers are read, never project data.
+  const countProjects = async (filter = '') => {
+    try {
+      const response = await gitlabGet(
+        `/projects?membership=true&min_access_level=30&simple=true&per_page=1${filter}`,
+      );
+      const total = response.headers.get('x-total');
+      return total === null || total === '' ? null : Number(total);
+    } catch {
+      return null;
+    }
+  };
+  const repos = await countProjects();
+  if (repos === null) console.log('INFO  gitlab: repository counts not available with this token — skipped');
+  const publicRepos = repos === null ? null : await countProjects('&visibility=public');
+  const archivedRepos = repos === null ? null : await countProjects('&archived=true');
+  // Everything that isn't public (GitLab's "private" and "internal").
+  const privateRepos = repos === null || publicRepos === null ? null : repos - publicRepos;
 
-  return { fetchedAt: new Date().toISOString(), commits, contributions, repos, days };
+  return {
+    fetchedAt: new Date().toISOString(),
+    commits,
+    contributions,
+    pullRequests,
+    issues,
+    reviews,
+    activeRepos: pushedProjects.size,
+    activeProjects: contributedProjects.size,
+    repos,
+    publicRepos,
+    privateRepos,
+    archivedRepos,
+    days,
+  };
 }
 
 /* ------------------------------ Baselines ------------------------------ */
@@ -223,11 +287,16 @@ async function main() {
   for (const [name, fetcher] of Object.entries(fetchers)) {
     try {
       sources[name] = await fetcher(from, to);
-      const { commits, contributions, repos, privateContributions } = sources[name];
-      const privateNote = privateContributions === undefined ? '' : ` (+${privateContributions} private)`;
+      const source = sources[name];
+      const privateNote =
+        source.privateContributions === undefined ? '' : ` (+${source.privateContributions} private)`;
       console.log(
-        `OK    ${name}: ${contributions} contributions, ${commits} commits${privateNote}, ${repos ?? "n/a"} repos, ` +
-          `${Object.keys(sources[name].days).length} active days`,
+        `OK    ${name}: ${source.contributions} contributions, ${source.commits} commits${privateNote}, ` +
+          `${source.pullRequests} PRs/MRs, ${source.issues} issues, ${source.reviews} reviews, ` +
+          `${source.activeProjects} active projects (${source.activeRepos} with commits), ` +
+          `${source.repos ?? 'n/a'} repos (${source.publicRepos ?? 'n/a'} public, ` +
+          `${source.privateRepos ?? 'n/a'} private, ${source.archivedRepos ?? 'n/a'} archived), ` +
+          `${Object.keys(source.days).length} active days`,
       );
     } catch (error) {
       const reason = error?.name === 'TimeoutError' ? 'request timed out (host unreachable?)' : error.message;

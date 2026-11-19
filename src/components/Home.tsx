@@ -16,7 +16,8 @@ import {
 import { MolecularNavBar } from './MolecularNavBar';
 import BackgroundEffects from './BackgroundEffects';
 import ContributionHeatmap from './ContributionHeatmap';
-import { activityStats, commitCount } from '../data/stats';
+import WeeklyActivity from './WeeklyActivity';
+import { activityRhythm, activityStats, commitCount, sumField } from '../data/stats';
 
 // Start of the PhD; "Experience" is computed from this so it never goes stale.
 const EXPERIENCE_START = new Date('2021-10-01');
@@ -26,8 +27,14 @@ const MS_PER_YEAR = 365.25 * 24 * 60 * 60 * 1000;
 const FALLBACK_REPOS = { github: 7, gitlab: 24 };
 
 const formatCount = (count: number) => count.toLocaleString('en');
+const formatDays = (count: number) => `${formatCount(count)} day${count === 1 ? '' : 's'}`;
+const formatDay = (isoDay: string) =>
+  new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(`${isoDay}T00:00:00Z`),
+  );
 
 type DialogContent = Array<{
+  heading?: string;
   label?: string;
   value?: string;
   institution?: string;
@@ -90,19 +97,77 @@ export default function Home() {
   const totalContributions = (github?.contributions ?? 0) + (gitlab?.contributions ?? 0);
   const githubRepos = github?.repos ?? FALLBACK_REPOS.github;
   const gitlabRepos = gitlab?.repos ?? FALLBACK_REPOS.gitlab;
+  const rhythm = activityRhythm(activityStats);
+
+  // Every number in the Commits dialog comes from the synced GitHub/GitLab data.
+  // Rows whose value isn't available (yet), or is zero, are left out rather than guessed or padded.
+  const liveRow = (label: string, value: number | null) =>
+    value ? [{ label, value: formatCount(value) }] : [];
+  const commitDetails: NonNullable<DialogContent> = hasLiveCommits
+    ? [
+        { heading: 'Commits · last 12 months' },
+        { label: 'Total', value: formatCount(totalCommits) },
+        {
+          label: github?.privateContributions ? 'GitHub (incl. private activity)' : 'GitHub',
+          value: githubCommits !== null ? formatCount(githubCommits) : 'Not synced yet'
+        },
+        { label: 'GitLab', value: gitlabCommits !== null ? formatCount(gitlabCommits) : 'Not synced yet' },
+        ...liveRow('Repositories committed to', sumField(activityStats, 'activeRepos')),
+
+        { heading: 'All contributions' },
+        { label: 'Total', value: formatCount(totalContributions) },
+        ...liveRow('Pull / merge requests opened', sumField(activityStats, 'pullRequests')),
+        ...liveRow('Issues opened', sumField(activityStats, 'issues')),
+        ...liveRow('Code reviews', sumField(activityStats, 'reviews')),
+
+        ...(rhythm
+          ? [
+              { heading: 'Rhythm' },
+              { label: 'Active days', value: formatDays(rhythm.activeDays) },
+              { label: 'Longest streak', value: formatDays(rhythm.longestStreak) },
+              { label: 'Current streak', value: formatDays(rhythm.currentStreak) },
+              ...(rhythm.busiestDay
+                ? [
+                    {
+                      label: 'Busiest day',
+                      value: `${formatDay(rhythm.busiestDay.date)} · ${formatCount(rhythm.busiestDay.count)}`
+                    }
+                  ]
+                : []),
+              ...(rhythm.busiestWeekday ? [{ label: 'Most active weekday', value: rhythm.busiestWeekday }] : [])
+            ]
+          : [])
+      ]
+    : [{ label: 'Live GitHub + GitLab data', value: 'Not synced yet' }];
+
+  // "Projects" = repositories with at least one contribution in the last 12 months.
+  const activeProjects = sumField(activityStats, 'activeProjects');
+  const platformRow = (label: string, value: number | null | undefined) =>
+    typeof value === 'number' ? [{ label, value: formatCount(value) }] : [];
+  const projectDetails: NonNullable<DialogContent> =
+    activeProjects !== null
+      ? [
+          { heading: 'Active · last 12 months' },
+          { label: 'Projects contributed to', value: formatCount(activeProjects) },
+          ...platformRow('GitHub', github?.activeProjects),
+          ...platformRow('GitLab', gitlab?.activeProjects),
+
+          { heading: 'All projects' },
+          { label: 'Repositories', value: formatCount(githubRepos + gitlabRepos) },
+          ...liveRow('Public (open source)', sumField(activityStats, 'publicRepos')),
+          ...liveRow('Private', sumField(activityStats, 'privateRepos')),
+          ...liveRow('Archived', sumField(activityStats, 'archivedRepos')),
+          ...liveRow('Started in the last 12 months (GitHub)', sumField(activityStats, 'newRepos'))
+        ]
+      : [{ label: 'Live GitHub + GitLab data', value: 'Not synced yet' }];
   const experienceYears = Math.floor((Date.now() - EXPERIENCE_START.getTime()) / MS_PER_YEAR);
 
   const statsData = [
     {
       title: 'Projects',
-      caption: 'and counting',
-      value: '20+',
-      details: [
-        { label: 'Active Projects', value: '7' },
-        { label: 'Completed', value: '20+' },
-        { label: 'Open Source', value: 'Coming Soon!' },
-        { label: 'Private', value: 'hehe can\'t tell you :-)' }
-      ],
+      caption: 'active · last 12 months',
+      value: activeProjects !== null ? formatCount(activeProjects) : '—',
+      details: projectDetails,
       icon: (
         <Blocks className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
@@ -110,24 +175,8 @@ export default function Home() {
     {
       title: 'Commits',
       caption: commitsCaption,
-      value: hasLiveCommits ? formatCount(totalCommits) : '1000+',
-      details: [
-        ...(hasLiveCommits
-          ? [
-              { label: 'Commits, last 12 months', value: formatCount(totalCommits) },
-              {
-                label: github?.privateContributions ? 'GitHub (incl. private activity)' : 'GitHub',
-                value: githubCommits !== null ? formatCount(githubCommits) : 'Not synced yet'
-              },
-              { label: 'GitLab', value: gitlabCommits !== null ? formatCount(gitlabCommits) : 'Not synced yet' },
-              { label: 'All contributions (commits, MRs, issues, reviews)', value: formatCount(totalContributions) }
-            ]
-          : [{ label: 'Commits', value: '1000+' }]),
-        { label: 'Issues Resolved', value: '∞' },
-        { label: 'Documentation', value: 'Too Little!' },
-        { label: 'Lines of Code', value: '100k+' },
-        { label: 'Tools, Libraries and Frameworks used', value: 'Too Many!' }
-      ],
+      value: hasLiveCommits ? formatCount(totalCommits) : '—',
+      details: commitDetails,
       icon: (
         <GitFork className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
@@ -235,7 +284,16 @@ export default function Home() {
       return (
         <div className="space-y-4">
           {content.map((item, index) => {
-            if (item.institution) {
+            if (item.heading) {
+              return (
+                <h4
+                  key={index}
+                  className="pt-2 first:pt-0 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
+                >
+                  {item.heading}
+                </h4>
+              );
+            } else if (item.institution) {
               return (
                 <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
                   <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{item.institution}</h4>
@@ -378,6 +436,7 @@ export default function Home() {
       </div>
 
       <ContributionHeatmap stats={activityStats} />
+      <WeeklyActivity end={activityStats.range?.to ?? null} />
 
       {dialogContent && (
         <div
