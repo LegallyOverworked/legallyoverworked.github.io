@@ -15,6 +15,17 @@ import {
 } from 'lucide-react';
 import { MolecularNavBar } from './MolecularNavBar';
 import BackgroundEffects from './BackgroundEffects';
+import ContributionHeatmap from './ContributionHeatmap';
+import { activityStats, commitCount } from '../data/stats';
+
+// Start of the PhD; "Experience" is computed from this so it never goes stale.
+const EXPERIENCE_START = new Date('2021-10-01');
+const MS_PER_YEAR = 365.25 * 24 * 60 * 60 * 1000;
+
+// Shown for a platform until its live data has been fetched at least once.
+const FALLBACK_REPOS = { github: 7, gitlab: 24 };
+
+const formatCount = (count: number) => count.toLocaleString('en');
 
 type DialogContent = Array<{
   label?: string;
@@ -64,9 +75,27 @@ export default function Home() {
     }
   };
 
+  const { github, gitlab } = activityStats.sources;
+  const githubCommits = commitCount(github);
+  const gitlabCommits = commitCount(gitlab);
+  const hasLiveCommits = githubCommits !== null || gitlabCommits !== null;
+  const totalCommits = (githubCommits ?? 0) + (gitlabCommits ?? 0);
+  // Say so when only one platform has synced, rather than passing its number off as the total.
+  const commitsCaption =
+    hasLiveCommits && gitlabCommits === null
+      ? 'last 12 months · GitHub only'
+      : hasLiveCommits && githubCommits === null
+        ? 'last 12 months · GitLab only'
+        : 'last 12 months';
+  const totalContributions = (github?.contributions ?? 0) + (gitlab?.contributions ?? 0);
+  const githubRepos = github?.repos ?? FALLBACK_REPOS.github;
+  const gitlabRepos = gitlab?.repos ?? FALLBACK_REPOS.gitlab;
+  const experienceYears = Math.floor((Date.now() - EXPERIENCE_START.getTime()) / MS_PER_YEAR);
+
   const statsData = [
     {
       title: 'Projects',
+      caption: 'and counting',
       value: '20+',
       details: [
         { label: 'Active Projects', value: '7' },
@@ -75,26 +104,38 @@ export default function Home() {
         { label: 'Private', value: 'hehe can\'t tell you :-)' }
       ],
       icon: (
-        <Blocks className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+        <Blocks className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
     },
     {
-      title: 'Contributions',
-      value: '1000+',
+      title: 'Commits',
+      caption: commitsCaption,
+      value: hasLiveCommits ? formatCount(totalCommits) : '1000+',
       details: [
+        ...(hasLiveCommits
+          ? [
+              { label: 'Commits, last 12 months', value: formatCount(totalCommits) },
+              {
+                label: github?.privateContributions ? 'GitHub (incl. private activity)' : 'GitHub',
+                value: githubCommits !== null ? formatCount(githubCommits) : 'Not synced yet'
+              },
+              { label: 'GitLab', value: gitlabCommits !== null ? formatCount(gitlabCommits) : 'Not synced yet' },
+              { label: 'All contributions (commits, MRs, issues, reviews)', value: formatCount(totalContributions) }
+            ]
+          : [{ label: 'Commits', value: '1000+' }]),
         { label: 'Issues Resolved', value: '∞' },
         { label: 'Documentation', value: 'Too Little!' },
         { label: 'Lines of Code', value: '100k+' },
-        { label: 'Commits', value: '1000+' },
         { label: 'Tools, Libraries and Frameworks used', value: 'Too Many!' }
       ],
       icon: (
-        <GitFork className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+        <GitFork className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
     },
     {
       title: 'Experience',
-      value: '4+ years',
+      caption: 'since 2021',
+      value: `${experienceYears}+ years`,
       details: [
         { 
           institution: 'UAntwerp',
@@ -111,24 +152,25 @@ export default function Home() {
         {
           institution: 'PhD Candidate @KU Leuven',
           degree: '@Bioscience Engineering (CMPG) @Electrical Engineering (ESAT)',
-          duration: '4+ years (2021-present)',
+          duration: `${experienceYears}+ years (2021-present)`,
           topic: 'Computational enzyme annotation: AI-driven enzyme discovery through ML for classification, parameter prediction and protein engineering',
           achievements: ['Applied Deep Learning & PEFT', 'Protein Language Models (ESM-2, ProtTrans)', 'SOTA Predictive Models', 'Full-stack Platform Engineering', 'Database Design', 'Teaching']
         }
       ],
       icon: (
-        <GraduationCap className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+        <GraduationCap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
     },
     {
       title: 'Repositories',
-      value: '31',
+      caption: 'GitHub + GitLab',
+      value: formatCount(githubRepos + gitlabRepos),
       details: [
-        { platform: 'GitHub', count: '7', topLangs: ['Python', 'R', 'Java', 'JavaScript'] },
-        { platform: 'GitLab', count: '24', topLangs: ['Python', 'R', 'Java'] }
+        { platform: 'GitHub', count: formatCount(githubRepos), topLangs: ['Python', 'R', 'Java', 'JavaScript'] },
+        { platform: 'GitLab', count: formatCount(gitlabRepos), topLangs: ['Python', 'R', 'Java'] }
       ],
       icon: (
-        <GitBranch className="h-6 w-6 text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text" />
+        <GitBranch className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       )
     }
   ];
@@ -309,8 +351,8 @@ export default function Home() {
         Bioinformatician (M.Sc.) and PhD researcher building end-to-end ML pipelines and scientific software tools for computational protein engineering
       </p>
 
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-4xl">
-        {statsData.map(({ title, value, details, icon }) => (
+      <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-4xl">
+        {statsData.map(({ title, caption, value, details, icon }) => (
           <div
             key={title}
             onClick={() => setDialogContent(details)}
@@ -318,21 +360,24 @@ export default function Home() {
             role="button"
             aria-label={`View ${title} details`}
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-300"></div>
-            <div className="relative p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-400">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+            <div className="relative px-4 py-3 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   {title}
                 </h3>
                 {icon}
               </div>
-              <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+              <p className="mt-1 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 {value}
               </p>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400">{caption}</p>
             </div>
           </div>
         ))}
       </div>
+
+      <ContributionHeatmap stats={activityStats} />
 
       {dialogContent && (
         <div
