@@ -16,6 +16,7 @@ import {
 import { MolecularNavBar } from './MolecularNavBar';
 import BackgroundEffects from './BackgroundEffects';
 import ContributionHeatmap from './ContributionHeatmap';
+import WeeklyActivity from './WeeklyActivity';
 import { activityRhythm, activityStats, commitCount, sumField } from '../data/stats';
 
 // Start of the PhD; "Experience" is computed from this so it never goes stale.
@@ -435,6 +436,7 @@ export default function Home() {
       </div>
 
       <ContributionHeatmap stats={activityStats} />
+      <WeeklyActivity end={activityStats.range?.to ?? null} />
 
       {dialogContent && (
         <div
