@@ -3,7 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ "main" ]
-  # Daily rebuild so the activity heatmap and live stats stay fresh.
   schedule:
     - cron: '17 4 * * *'
   workflow_dispatch:
@@ -12,7 +11,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  actions: write # lets the scheduled run keep its own schedule enabled
+  actions: write
 
 concurrency:
   group: "pages"
@@ -34,8 +33,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Writes a counts-only snapshot (no repo names). Never fails the build:
-      # if a source is unreachable, the last deployed data is reused.
       - name: Fetch GitHub + GitLab activity stats
         env:
           GH_STATS_TOKEN: ${{ secrets.GH_STATS_TOKEN }}
@@ -43,7 +40,6 @@ jobs:
           STATS_BASELINE_URL: https://legallyoverworked.github.io/stats.json
         run: node scripts/fetch-stats.mjs
 
-      # GitHub pauses schedules on public repos after 60 days without activity.
       - name: Keep the daily schedule enabled
         if: github.event_name == 'schedule'
         continue-on-error: true
