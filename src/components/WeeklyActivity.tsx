@@ -6,14 +6,13 @@ import { posts, speaking, writing } from '../data/activity-log';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEK_MS = 7 * DAY_MS;
-const WEEKS = 53; // the same window as the daily heatmap above
-const ROWS = 5; // a month holds at most five week starts
-const CELL = 14; // px
-const GAP = 4; // px
+const COLUMNS = 13;
+const WEEKS = 8 * COLUMNS;
+const CELL = 14;
+const GAP = 4;
 const PITCH = CELL + GAP;
-const TOOLTIP_HALF_WIDTH = 136; // px; keeps the fixed tooltip on screen
+const TOOLTIP_HALF_WIDTH = 136;
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const shortDate = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'short',
@@ -24,11 +23,9 @@ const shortDate = new Intl.DateTimeFormat('en-GB', {
 interface Panel {
   key: string;
   title: string;
-  /** Singular noun for one entry, e.g. "talk". */
   noun: string;
   icon: ComponentType<{ className?: string }>;
   iconClass: string;
-  /** One hue, light -> dark (reversed on the dark surface), level 0..4. */
   levels: string[];
   entries: LogEntry[];
 }
@@ -81,16 +78,10 @@ const PANELS: Panel[] = [
   },
 ];
 
-// Tailwind only ships class names it can see in full.
 const LG_COLUMNS = ['', 'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3'];
 
 interface Week {
-  /** UTC midnight of the week's Sunday. */
   start: number;
-  /** One column per calendar month, in order. */
-  column: number;
-  /** Which week of its month (0-4), by the day the week starts. */
-  row: number;
   entries: LogEntry[];
   level: number;
 }
@@ -111,10 +102,6 @@ const plural = (count: number, word: string) =>
 
 const parseDay = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? Date.parse(`${iso}T00:00:00Z`) : NaN);
 
-/**
- * The same 53 Sunday-start weeks as ContributionHeatmap's buildCells, so a
- * date falls in the same week in every view on the page.
- */
 function weekWindow(endIso: string | null): WeekRange {
   const end = endIso ? new Date(`${endIso}T00:00:00Z`) : new Date();
   const endDay = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
@@ -123,19 +110,11 @@ function weekWindow(endIso: string | null): WeekRange {
 }
 
 function buildWeeks(entries: LogEntry[], { startDay, endDay }: WeekRange): Week[] {
-  const weeks: Week[] = [];
-  let column = -1;
-  let previousMonth = -1;
-  for (let index = 0; index < WEEKS; index++) {
-    const start = startDay + index * WEEK_MS;
-    const date = new Date(start);
-    const month = date.getUTCFullYear() * 12 + date.getUTCMonth();
-    if (month !== previousMonth) {
-      column += 1;
-      previousMonth = month;
-    }
-    weeks.push({ start, column, row: Math.floor((date.getUTCDate() - 1) / 7), entries: [], level: 0 });
-  }
+  const weeks: Week[] = Array.from({ length: WEEKS }, (_, index) => ({
+    start: startDay + index * WEEK_MS,
+    entries: [],
+    level: 0,
+  }));
 
   for (const entry of entries) {
     const day = parseDay(entry.date);
@@ -143,8 +122,6 @@ function buildWeeks(entries: LogEntry[], { startDay, endDay }: WeekRange): Week[
     weeks[Math.floor((day - startDay) / WEEK_MS)].entries.push(entry);
   }
 
-  // Up to four a week, the count is the shade (1 entry = level 1 ... 4 = level 4).
-  // Busier logs scale linearly to the busiest week (quartiles tie on small counts).
   const max = Math.max(...weeks.map((week) => week.entries.length));
   for (const week of weeks) {
     const count = week.entries.length;
@@ -153,7 +130,6 @@ function buildWeeks(entries: LogEntry[], { startDay, endDay }: WeekRange): Week[
   return weeks;
 }
 
-/** Most recent entry up to the end of the window, even if older than a year. */
 function latestEntry(entries: LogEntry[], endDay: number): string | null {
   let latest = -Infinity;
   for (const entry of entries) {
@@ -166,29 +142,15 @@ function latestEntry(entries: LogEntry[], endDay: number): string | null {
 function WeekPanel({ panel, weeks, endDay }: { panel: Panel; weeks: Week[]; endDay: number }) {
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
 
-  const columns = weeks[weeks.length - 1].column + 1;
   const total = weeks.reduce((sum, week) => sum + week.entries.length, 0);
   const latest = useMemo(() => latestEntry(panel.entries, endDay), [panel.entries, endDay]);
   const Icon = panel.icon;
 
-  const byPosition = useMemo(() => new Map(weeks.map((week) => [`${week.column}:${week.row}`, week])), [weeks]);
-
-  // Label every other month, counting back from the current one, so labels never collide.
-  const monthLabels = useMemo(() => {
-    const labels: { column: number; label: string }[] = [];
-    for (const week of weeks) {
-      const isFirstOfColumn = labels.length === 0 || labels[labels.length - 1].column !== week.column;
-      if (isFirstOfColumn) labels.push({ column: week.column, label: MONTHS[new Date(week.start).getUTCMonth()] });
-    }
-    return labels.filter(({ column }) => (columns - 1 - column) % 2 === 0);
-  }, [weeks, columns]);
-
-  // Resolve the week from the pointer position (by column and row, since months have 4 or 5 weeks).
   const showTooltip = (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const column = Math.floor((event.clientX - rect.left + GAP / 2) / PITCH);
     const row = Math.floor((event.clientY - rect.top + GAP / 2) / PITCH);
-    const week = byPosition.get(`${column}:${row}`);
+    const week = column >= 0 && column < COLUMNS && row >= 0 ? weeks[row * COLUMNS + column] : undefined;
     if (!week) {
       setTooltip(null);
       return;
@@ -207,7 +169,7 @@ function WeekPanel({ panel, weeks, endDay }: { panel: Panel; weeks: Week[]; endD
 
   return (
     <div className="relative">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-20" />
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-700 to-accent-500 dark:from-brand-500 dark:to-accent-400 rounded-xl blur opacity-20" />
       <div className="relative h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-5 flex flex-col">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -217,45 +179,26 @@ function WeekPanel({ panel, weeks, endDay }: { panel: Panel; weeks: Week[]; endD
         </div>
         <p className="mt-1 mb-3 text-sm text-gray-600 dark:text-gray-400">
           <span className="text-base font-semibold text-gray-900 dark:text-white">{total.toLocaleString('en')}</span>{' '}
-          {total === 1 ? panel.noun : `${panel.noun}s`} in the last year
+          {total === 1 ? panel.noun : `${panel.noun}s`}
         </p>
 
-        <div className="w-max mx-auto">
-          <div
-            className="grid text-[10px] leading-none text-gray-500 dark:text-gray-400 h-4"
-            style={{ gridTemplateColumns: `repeat(${columns}, ${CELL}px)`, columnGap: GAP }}
-            aria-hidden="true"
-          >
-            {monthLabels.map(({ column, label }) => (
-              <span key={column} className="whitespace-nowrap" style={{ gridColumnStart: column + 1 }}>
-                {label}
-              </span>
-            ))}
-          </div>
-
-          <div
-            role="img"
-            aria-label={`${plural(total, panel.noun)} in the last year, by week`}
-            className="grid"
-            style={{
-              gridTemplateColumns: `repeat(${columns}, ${CELL}px)`,
-              gridTemplateRows: `repeat(${ROWS}, ${CELL}px)`,
-              gap: GAP,
-            }}
-            onMouseMove={showTooltip}
-            onMouseLeave={() => setTooltip(null)}
-            onClick={showTooltip}
-          >
-            {weeks.map((week) => (
-              <div
-                key={week.start}
-                className={`rounded-sm ${panel.levels[week.level]} ${
-                  tooltip?.week === week ? 'outline outline-1 outline-gray-900/60 dark:outline-white/70' : ''
-                }`}
-                style={{ gridColumnStart: week.column + 1, gridRowStart: week.row + 1 }}
-              />
-            ))}
-          </div>
+        <div
+          role="img"
+          aria-label={`${plural(total, panel.noun)} in the last two years, by week`}
+          className="grid w-max mx-auto"
+          style={{ gridTemplateColumns: `repeat(${COLUMNS}, ${CELL}px)`, gridAutoRows: CELL, gap: GAP }}
+          onMouseMove={showTooltip}
+          onMouseLeave={() => setTooltip(null)}
+          onClick={showTooltip}
+        >
+          {weeks.map((week) => (
+            <div
+              key={week.start}
+              className={`rounded-sm ${panel.levels[week.level]} ${
+                tooltip?.week === week ? 'outline outline-1 outline-gray-900/60 dark:outline-white/70' : ''
+              }`}
+            />
+          ))}
         </div>
 
         <div className="mt-auto pt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-xs text-gray-500 dark:text-gray-400">
@@ -310,10 +253,6 @@ function WeekPanel({ panel, weeks, endDay }: { panel: Panel; weeks: Week[]; endD
   );
 }
 
-/**
- * Three weekly heatmaps (writing, speaking, posts) on the heatmap's time axis.
- * Pass the heatmap's end day (stats.range.to) so both views cover the same weeks.
- */
 export default function WeeklyActivity({ end }: { end: string | null }) {
   const range = useMemo(() => weekWindow(end), [end]);
   const panels = useMemo(
@@ -321,7 +260,6 @@ export default function WeeklyActivity({ end }: { end: string | null }) {
     [range],
   );
 
-  // In production, an empty panel is left out rather than shown as zero.
   const visible = panels.filter(
     ({ weeks }) => import.meta.env.DEV || weeks.some((week) => week.entries.length > 0),
   );

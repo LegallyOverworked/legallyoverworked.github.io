@@ -1,33 +1,20 @@
 import raw from './stats.json';
 
-/**
- * Counts-only activity snapshot written by scripts/fetch-stats.mjs
- * (daily, from the deploy workflow). A source is null until its first
- * successful fetch.
- */
 export interface SourceStats {
   fetchedAt: string;
   commits: number;
-  /** GitHub only: private activity reported as a bare count. */
   privateContributions?: number;
   contributions: number;
-  /** Pull requests (GitHub) / merge requests (GitLab) opened. */
   pullRequests?: number;
   issues?: number;
   reviews?: number;
-  /** GitHub only: repositories created. */
   newRepos?: number;
-  /** Repositories that received commits. */
   activeRepos?: number;
-  /** Repositories with any contribution (commit, pull/merge request, issue, review). */
   activeProjects?: number;
   publicRepos?: number | null;
-  /** Everything that isn't public (on GitLab: private and internal). */
   privateRepos?: number | null;
   archivedRepos?: number | null;
-  /** null when the token's scope doesn't allow counting repositories. */
   repos: number | null;
-  /** ISO day (UTC) -> contribution count; days without activity are omitted. */
   days: Record<string, number>;
 }
 
@@ -42,11 +29,9 @@ export interface ActivityStats {
 
 export const activityStats = raw as unknown as ActivityStats;
 
-/** Commits including private GitHub activity that is only available as a count. */
 export const commitCount = (source: SourceStats | null): number | null =>
   source ? source.commits + (source.privateContributions ?? 0) : null;
 
-/** Sum of an optional counter across the sources that report it; null if none do. */
 export function sumField(
   stats: ActivityStats,
   field:
@@ -68,9 +53,7 @@ export function sumField(
 
 export interface ActivityRhythm {
   activeDays: number;
-  /** Longest run of consecutive active days in the period. */
   longestStreak: number;
-  /** Run of active days up to the latest synced day (0 if it has lapsed). */
   currentStreak: number;
   busiestDay: { date: string; count: number } | null;
   busiestWeekday: string | null;
@@ -79,7 +62,6 @@ export interface ActivityRhythm {
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-/** Streaks and peaks over the synced period, combining both platforms. */
 export function activityRhythm(stats: ActivityStats): ActivityRhythm | null {
   if (!stats.range) return null;
   const { github, gitlab } = stats.sources;
@@ -114,8 +96,6 @@ export function activityRhythm(stats: ActivityStats): ActivityRhythm | null {
     }
   }
 
-  // The latest day is usually still in progress when the data is synced,
-  // so an empty "today" doesn't break a streak that ran through yesterday.
   const currentStreak = countToday > 0 ? run : runBeforeToday;
   const topWeekday = perWeekday.indexOf(Math.max(...perWeekday));
 

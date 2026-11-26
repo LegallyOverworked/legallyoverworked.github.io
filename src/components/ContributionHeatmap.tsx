@@ -4,11 +4,10 @@ import type { ActivityStats } from '../data/stats';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WEEKS = 53;
-const CELL = 11; // px
-const GAP = 3; // px
-const DAY_LABEL_WIDTH = 30; // px
+const CELL = 11;
+const GAP = 3;
+const DAY_LABEL_WIDTH = 30;
 
-// One hue, light -> dark (reversed on the dark surface) so intensity reads as magnitude.
 const LEVEL_CLASSES = [
   'bg-gray-200 dark:bg-gray-700/60',
   'bg-indigo-300 dark:bg-indigo-700',
@@ -54,7 +53,6 @@ function buildCells(stats: ActivityStats): Cell[] {
   const { github, gitlab } = stats.sources;
   const end = stats.range ? new Date(`${stats.range.to}T00:00:00Z`) : new Date();
   const endDay = Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate());
-  // Start on the Sunday 52 weeks before the current week, like GitHub's calendar.
   const startDay = endDay - ((WEEKS - 1) * 7 + new Date(endDay).getUTCDay()) * DAY_MS;
 
   const cells: Cell[] = [];
@@ -66,7 +64,6 @@ function buildCells(stats: ActivityStats): Cell[] {
     cells.push({ date, github: fromGithub, gitlab: fromGitlab, total: fromGithub + fromGitlab, level: 0 });
   }
 
-  // Quartiles of the active days decide the four intensity levels.
   const active = cells.map((cell) => cell.total).filter((total) => total > 0).sort((a, b) => a - b);
   if (active.length) {
     const quantile = (q: number) => active[Math.min(active.length - 1, Math.floor(q * active.length))];
@@ -91,7 +88,6 @@ function updatedLabel(stats: ActivityStats): string | null {
   return day ? `Updated ${day}` : null;
 }
 
-/** Names what the numbers cover, so a missing source is never shown as zero. */
 function sourcesLabel(stats: ActivityStats): string {
   const { github, gitlab } = stats.sources;
   if (github && !gitlab) return 'GitHub only · GitLab not synced yet';
@@ -110,7 +106,6 @@ export default function ContributionHeatmap({ stats }: { stats: ActivityStats })
   const coverage = hasBothSources ? 'across GitHub and GitLab' : stats.sources.github ? 'on GitHub' : 'on GitLab';
   const updated = updatedLabel(stats);
 
-  // A month gets a label on the first column whose week starts in it.
   const monthLabels = useMemo(() => {
     const labels: { column: number; label: string }[] = [];
     for (let column = 0; column * 7 < cells.length; column++) {
@@ -124,13 +119,11 @@ export default function ContributionHeatmap({ stats }: { stats: ActivityStats })
     return labels;
   }, [cells]);
 
-  // On narrow screens the grid scrolls sideways: start at the most recent weeks.
   useEffect(() => {
     const element = scrollRef.current;
     if (element) element.scrollLeft = element.scrollWidth;
   }, []);
 
-  // Resolve the cell from the pointer position so the gaps between dots count as hits too.
   const showTooltip = (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const pitch = CELL + GAP;
@@ -158,7 +151,7 @@ export default function ContributionHeatmap({ stats }: { stats: ActivityStats })
       className="relative mt-8 w-full max-w-4xl"
       aria-label="Combined GitHub and GitLab contribution activity"
     >
-      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-20" />
+      <div className="absolute -inset-1 bg-gradient-to-r from-brand-700 to-accent-500 dark:from-brand-500 dark:to-accent-400 rounded-xl blur opacity-20" />
       <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-3">
           <h3 className="text-sm text-gray-600 dark:text-gray-400">

@@ -1,38 +1,19 @@
 #!/usr/bin/env node
-/**
- * Fetches a year of GitHub + GitLab activity and writes a counts-only snapshot
- * that the homepage reads (heatmap + live stat chips).
- *
- * Privacy: the snapshot and the logs contain per-day counts and totals only —
- * never repository names, commit messages or usernames.
- *
- * Fail-soft: if a source cannot be fetched, its last good data is reused
- * (from the deployed site or the committed snapshot). This script never exits
- * non-zero, so a failing API can't break a deploy.
- *
- * Env:
- *   GH_STATS_TOKEN       GitHub token (read-only)
- *   GITLAB_STATS_TOKEN   GitLab token (read_user is enough; cannot read code)
- *   GITLAB_URL           GitLab base URL (default: https://gitlab.kuleuven.be)
- *   STATS_BASELINE_URL   Optional URL of the last deployed stats.json
- */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_FILES = [
-  resolve(ROOT, 'src/data/stats.json'), // imported by the app at build time
-  resolve(ROOT, 'public/stats.json'), // served, so the next run can use it as a baseline
+  resolve(ROOT, 'src/data/stats.json'),
+  resolve(ROOT, 'public/stats.json'),
 ];
 const REQUEST_TIMEOUT_MS = 20_000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// Local runs: pick up tokens from an untracked .env file if there is one.
 try {
   process.loadEnvFile?.(resolve(ROOT, '.env'));
 } catch {
-  /* no .env file — rely on the real environment */
 }
 
 const GITLAB_URL = (process.env.GITLAB_URL || 'https://gitlab.kuleuven.be').replace(/\/+$/, '');
@@ -45,7 +26,6 @@ async function fetchWithTimeout(url, options = {}) {
   return fetch(url, { ...options, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
 }
 
-/* ------------------------------- GitHub -------------------------------- */
 
 async function fetchGitHub(from, to) {
   const token = process.env.GH_STATS_TOKEN;
@@ -95,7 +75,6 @@ async function fetchGitHub(from, to) {
   const viewer = payload.data.viewer;
   const { contributionsCollection: collection, repositories } = viewer;
 
-  // Opaque repository ids are used only to count distinct projects; they are not stored.
   const contributedTo = new Set(
     [
       ...collection.commitContributionsByRepository,
@@ -112,7 +91,6 @@ async function fetchGitHub(from, to) {
 
   return {
     fetchedAt: new Date().toISOString(),
-    // Commits GitHub can attribute, plus private activity it only reports as a count.
     commits: collection.totalCommitContributions,
     privateContributions: collection.restrictedContributionsCount,
     contributions: collection.contributionCalendar.totalContributions,
@@ -120,7 +98,6 @@ async function fetchGitHub(from, to) {
     issues: collection.totalIssueContributions,
     reviews: collection.totalPullRequestReviewContributions,
     newRepos: collection.totalRepositoryContributions,
-    // Repositories that received commits / any contribution (only counts are kept).
     activeRepos: collection.commitContributionsByRepository.length,
     activeProjects: contributedTo.size,
     repos: repositories.totalCount,
@@ -131,7 +108,6 @@ async function fetchGitHub(from, to) {
   };
 }
 
-/* ------------------------------- GitLab -------------------------------- */
 
 async function gitlabGet(path) {
   const token = process.env.GITLAB_STATS_TOKEN;
@@ -144,22 +120,21 @@ async function gitlabGet(path) {
   return response;
 }
 
-// Mirrors what GitHub counts as a contribution: commits, opened issues/MRs, reviews.
 const GITLAB_ISSUE_TARGETS = new Set(['Issue', 'WorkItem']);
 
 async function fetchGitLab(from, to) {
-  const after = isoDay(new Date(from.getTime() - DAY_MS)); // `after` is exclusive
-  const before = isoDay(new Date(to.getTime() + DAY_MS)); // `before` is exclusive
+  const after = isoDay(new Date(from.getTime() - DAY_MS));
+  const before = isoDay(new Date(to.getTime() + DAY_MS));
   const fromDay = isoDay(from);
 
   const days = {};
   let commits = 0;
   let contributions = 0;
-  let pullRequests = 0; // merge requests opened
+  let pullRequests = 0;
   let issues = 0;
-  let reviews = 0; // merge request approvals
-  const pushedProjects = new Set(); // ids only, to count projects that received commits
-  const contributedProjects = new Set(); // ids only, to count projects with any contribution
+  let reviews = 0;
+  const pushedProjects = new Set();
+  const contributedProjects = new Set();
   let page = '1';
   let pages = 0;
 
@@ -203,10 +178,6 @@ async function fetchGitLab(from, to) {
     page = response.headers.get('x-next-page') || '';
   }
 
-  // Projects the token owner can contribute to (Developer role or higher).
-  // Optional: needs the Project: Read permission (legacy tokens: `read_api`).
-  // Without it these counts are skipped and the site keeps its hand-set number.
-  // Only the totals from the response headers are read, never project data.
   const countProjects = async (filter = '') => {
     try {
       const response = await gitlabGet(
@@ -222,7 +193,6 @@ async function fetchGitLab(from, to) {
   if (repos === null) console.log('INFO  gitlab: repository counts not available with this token — skipped');
   const publicRepos = repos === null ? null : await countProjects('&visibility=public');
   const archivedRepos = repos === null ? null : await countProjects('&archived=true');
-  // Everything that isn't public (GitLab's "private" and "internal").
   const privateRepos = repos === null || publicRepos === null ? null : repos - publicRepos;
 
   return {
@@ -242,7 +212,6 @@ async function fetchGitLab(from, to) {
   };
 }
 
-/* ------------------------------ Baselines ------------------------------ */
 
 async function loadBaselines() {
   const baselines = [];
@@ -250,7 +219,6 @@ async function loadBaselines() {
   try {
     baselines.push(JSON.parse(await readFile(OUT_FILES[0], 'utf8')));
   } catch {
-    /* no committed snapshot yet */
   }
 
   const url = process.env.STATS_BASELINE_URL;
@@ -259,14 +227,12 @@ async function loadBaselines() {
       const response = await fetchWithTimeout(url);
       if (response.ok) baselines.push(await response.json());
     } catch {
-      /* site not deployed yet, or unreachable */
     }
   }
 
   return baselines;
 }
 
-/** Newest previously fetched data for one source, or null. */
 function lastGood(baselines, source) {
   return baselines
     .map((baseline) => baseline?.sources?.[source])
@@ -274,7 +240,6 @@ function lastGood(baselines, source) {
     .sort((a, b) => b.fetchedAt.localeCompare(a.fetchedAt))[0] ?? null;
 }
 
-/* -------------------------------- Main --------------------------------- */
 
 async function main() {
   const to = new Date();
@@ -325,6 +290,5 @@ async function main() {
 }
 
 main().catch((error) => {
-  // Never fail the deploy over statistics.
   warn(`stats fetch crashed: ${error.message}`);
 });
