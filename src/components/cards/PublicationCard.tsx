@@ -12,7 +12,7 @@ interface PublicationCardProps {
 
 export function PublicationCard({ title, journal, year, citations, link, description }: PublicationCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+    <div className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h4 className="text-xl font-semibold mb-2">{title}</h4>

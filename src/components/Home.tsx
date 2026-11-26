@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import profileImage from '../assets/running101k.jpeg';
-import homeAdd1 from '../assets/home_page_add1.jpg';
-import homeAdd2 from '../assets/home_page_add2.jpg';
-import homeAdd3 from '../assets/home_page_add3.jpg';
-import homeAdd5 from '../assets/home_page_add5.jpg';
+import profileImage from '../assets/running101k.webp';
+import homeAdd1 from '../assets/home_page_add1.webp';
+import homeAdd2 from '../assets/home_page_add2.webp';
+import homeAdd3 from '../assets/home_page_add3.webp';
+import homeAdd5 from '../assets/home_page_add5.webp';
+import homeAdd1Thumb from '../assets/home_page_add1_thumb.webp';
+import homeAdd2Thumb from '../assets/home_page_add2_thumb.webp';
+import homeAdd3Thumb from '../assets/home_page_add3_thumb.webp';
+import homeAdd5Thumb from '../assets/home_page_add5_thumb.webp';
 import { 
   Blocks, 
   GitFork, 
@@ -14,16 +18,16 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { MolecularNavBar } from './MolecularNavBar';
-import BackgroundEffects from './BackgroundEffects';
+import { FOCUS_AREAS } from './focusAreas';
+import FocusBackground from './FocusBackground';
+import { SCENES } from './backgrounds';
 import ContributionHeatmap from './ContributionHeatmap';
 import WeeklyActivity from './WeeklyActivity';
 import { activityRhythm, activityStats, commitCount, sumField } from '../data/stats';
 
-// Start of the PhD; "Experience" is computed from this so it never goes stale.
 const EXPERIENCE_START = new Date('2021-10-01');
 const MS_PER_YEAR = 365.25 * 24 * 60 * 60 * 1000;
 
-// Shown for a platform until its live data has been fetched at least once.
 const FALLBACK_REPOS = { github: 7, gitlab: 24 };
 
 const formatCount = (count: number) => count.toLocaleString('en');
@@ -52,10 +56,9 @@ export default function Home() {
   const [showGallery, setShowGallery] = useState(false);
   const [showCircularImages, setShowCircularImages] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
-    type IconCategory = 'DNA' | 'Proteins' | 'Enzymes' | 'AI';
-  const [activeTab, setActiveTab] = useState<IconCategory>('DNA');
-  const categories: IconCategory[] = ['DNA', 'Proteins', 'Enzymes', 'AI'];
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [activeArea, setActiveArea] = useState(0);
+  const focusArea = FOCUS_AREAS[activeArea];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -68,10 +71,10 @@ export default function Home() {
   }, []);
 
   const additionalImages = [
-    { src: homeAdd1, position: '-left-28 top-1/4' },
-    { src: homeAdd2, position: '-left-20 top-2/3' },
-    { src: homeAdd3, position: '-right-28 top-1/4' },
-    { src: homeAdd5, position: '-right-20 top-2/3' },
+    { src: homeAdd1, thumb: homeAdd1Thumb, position: '-left-28 top-1/4' },
+    { src: homeAdd2, thumb: homeAdd2Thumb, position: '-left-20 top-2/3' },
+    { src: homeAdd3, thumb: homeAdd3Thumb, position: '-right-28 top-1/4' },
+    { src: homeAdd5, thumb: homeAdd5Thumb, position: '-right-20 top-2/3' },
   ];
 
   const handleImageClick = () => {
@@ -87,7 +90,6 @@ export default function Home() {
   const gitlabCommits = commitCount(gitlab);
   const hasLiveCommits = githubCommits !== null || gitlabCommits !== null;
   const totalCommits = (githubCommits ?? 0) + (gitlabCommits ?? 0);
-  // Say so when only one platform has synced, rather than passing its number off as the total.
   const commitsCaption =
     hasLiveCommits && gitlabCommits === null
       ? 'last 12 months · GitHub only'
@@ -99,8 +101,6 @@ export default function Home() {
   const gitlabRepos = gitlab?.repos ?? FALLBACK_REPOS.gitlab;
   const rhythm = activityRhythm(activityStats);
 
-  // Every number in the Commits dialog comes from the synced GitHub/GitLab data.
-  // Rows whose value isn't available (yet), or is zero, are left out rather than guessed or padded.
   const liveRow = (label: string, value: number | null) =>
     value ? [{ label, value: formatCount(value) }] : [];
   const commitDetails: NonNullable<DialogContent> = hasLiveCommits
@@ -140,7 +140,6 @@ export default function Home() {
       ]
     : [{ label: 'Live GitHub + GitLab data', value: 'Not synced yet' }];
 
-  // "Projects" = repositories with at least one contribution in the last 12 months.
   const activeProjects = sumField(activityStats, 'activeProjects');
   const platformRow = (label: string, value: number | null | undefined) =>
     typeof value === 'number' ? [{ label, value: formatCount(value) }] : [];
@@ -169,7 +168,7 @@ export default function Home() {
       value: activeProjects !== null ? formatCount(activeProjects) : '—',
       details: projectDetails,
       icon: (
-        <Blocks className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <Blocks className="h-4 w-4 text-brand-700 dark:text-brand-400" />
       )
     },
     {
@@ -178,7 +177,7 @@ export default function Home() {
       value: hasLiveCommits ? formatCount(totalCommits) : '—',
       details: commitDetails,
       icon: (
-        <GitFork className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <GitFork className="h-4 w-4 text-brand-700 dark:text-brand-400" />
       )
     },
     {
@@ -207,7 +206,7 @@ export default function Home() {
         }
       ],
       icon: (
-        <GraduationCap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <GraduationCap className="h-4 w-4 text-brand-700 dark:text-brand-400" />
       )
     },
     {
@@ -219,7 +218,7 @@ export default function Home() {
         { platform: 'GitLab', count: formatCount(gitlabRepos), topLangs: ['Python', 'R', 'Java'] }
       ],
       icon: (
-        <GitBranch className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+        <GitBranch className="h-4 w-4 text-brand-700 dark:text-brand-400" />
       )
     }
   ];
@@ -240,6 +239,7 @@ export default function Home() {
           <img
             src={additionalImages[currentImageIndex].src}
             alt={`Gallery image ${currentImageIndex + 1}`}
+            decoding="async"
             className="w-full h-auto max-h-[80vh] object-contain"
           />
           
@@ -296,7 +296,7 @@ export default function Home() {
             } else if (item.institution) {
               return (
                 <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
-                  <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{item.institution}</h4>
+                  <h4 className="text-lg font-semibold text-brand-700 dark:text-brand-400">{item.institution}</h4>
                   <p className="text-gray-700 dark:text-gray-300">{item.degree}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{item.duration}</p>
                   {item.topic && (
@@ -312,7 +312,7 @@ export default function Home() {
             } else if (item.platform) {
               return (
                 <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
-                  <h4 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{item.platform}</h4>
+                  <h4 className="text-lg font-semibold text-brand-700 dark:text-brand-400">{item.platform}</h4>
                   <p className="text-gray-700 dark:text-gray-300">Repositories: {item.count}</p>
                   <div className="mt-2">
                     <span className="text-sm text-gray-500 dark:text-gray-400">Top Languages:</span>
@@ -330,7 +330,7 @@ export default function Home() {
               return (
                 <div key={index} className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
                   <span className="text-gray-700 dark:text-gray-300">{item.label}</span>
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">{item.value}</span>
+                  <span className="font-semibold text-brand-700 dark:text-brand-400">{item.value}</span>
                 </div>
               );
             }
@@ -343,13 +343,14 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 pt-16 overflow-hidden">
-      <BackgroundEffects activeTab={activeTab} />
-      <MolecularNavBar 
-        active={categories.indexOf(activeTab)}
-        onActiveChange={(index) => setActiveTab(categories[index])}
-      />
+      <MolecularNavBar active={activeArea} onActiveChange={setActiveArea} />
 
       <div className="relative w-96 h-72 flex items-center justify-center mb-6">
+        <FocusBackground
+          key={focusArea.background}
+          scene={SCENES[focusArea.background]}
+          className="helix-field pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-screen -translate-x-1/2 -translate-y-1/2"
+        />
         {showCircularImages && !isSmallScreen && (
           <>
             {additionalImages.map((img, index) => (
@@ -362,10 +363,13 @@ export default function Home() {
                   setShowGallery(true);
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-blue-600 to-purple-600 rounded-[40%] blur opacity-75" />
+                <div className="absolute inset-0 bg-gradient-to-b from-brand-700 to-accent-500 dark:from-brand-500 dark:to-accent-400 rounded-[40%] blur opacity-75" />
                 <img
-                  src={img.src}
+                  src={img.thumb}
                   alt={`Profile ${index + 1}`}
+                  width={256}
+                  height={256}
+                  decoding="async"
                   className="w-full h-full object-cover rounded-[40%] relative z-10 border-2 border-white dark:border-gray-800"
                 />
               </div>
@@ -379,10 +383,13 @@ export default function Home() {
           role="button"
           aria-label={isSmallScreen ? 'View Gallery' : (showCircularImages ? 'Hide Images' : 'Show More')}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-600 to-purple-600 rounded-[40%] blur opacity-75" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-700 to-accent-500 dark:from-brand-500 dark:to-accent-400 rounded-[40%] blur opacity-75" />
           <img
             src={profileImage}
             alt="Profile"
+            width={640}
+            height={960}
+            decoding="async"
             className="w-64 h-64 object-cover relative z-10 rounded-[40%] object-top border-2 border-white dark:border-gray-800"
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 rounded-[40%] z-20 flex items-center justify-center">
@@ -393,7 +400,7 @@ export default function Home() {
         </div>
       </div>
 
-      <h1 className="mt-4 text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+      <h1 className="mt-4 text-4xl font-bold bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
         Jaldert François
       </h1>
 
@@ -418,7 +425,7 @@ export default function Home() {
             role="button"
             aria-label={`View ${title} details`}
           >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-700 to-accent-500 dark:from-brand-500 dark:to-accent-400 rounded-lg blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
             <div className="relative px-4 py-3 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-all duration-300">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -426,7 +433,7 @@ export default function Home() {
                 </h3>
                 {icon}
               </div>
-              <p className="mt-1 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <p className="mt-1 text-xl font-bold bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
                 {value}
               </p>
               <p className="text-[11px] text-gray-500 dark:text-gray-400">{caption}</p>
@@ -450,7 +457,7 @@ export default function Home() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
                 Details
               </h3>
               <button

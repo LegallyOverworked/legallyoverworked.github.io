@@ -25,7 +25,6 @@ export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
-  // Handle Escape key press to close dialog
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -47,7 +46,6 @@ export function ContactForm() {
     message: string;
   }>({ type: 'success', title: '', message: '' });
 
-  // Initialize EmailJS on component mount
   useEffect(() => {
     try {
       emailjs.init('6OOBGWCbZTsf4E8Td');
@@ -93,7 +91,6 @@ export function ContactForm() {
       ...prev,
       [id]: value
     }));
-    // Clear error when user starts typing
     if (errors[id as keyof FormErrors]) {
       setErrors(prev => ({
         ...prev,
@@ -114,7 +111,6 @@ export function ContactForm() {
     try {
       console.log('Starting email sending process...');
       
-      // Template variables for notification email
       const notificationTemplateVars = {
         to_email: 'jaldert.francois@outlook.com',
         to_name: 'Jaldert François',
@@ -126,7 +122,6 @@ export function ContactForm() {
       
       console.log('Sending notification email with vars:', notificationTemplateVars);
       
-      // Send email to your address
       const notificationResult = await emailjs.send(
         'service_6d6zyi9',
         'template_a8iygp6',
@@ -135,7 +130,6 @@ export function ContactForm() {
       
       console.log('Notification email sent successfully:', notificationResult);
 
-      // Template variables for confirmation email
       const confirmationTemplateVars = {
         to_email: formData.email,
         to_name: formData.name,
@@ -145,7 +139,6 @@ export function ContactForm() {
       
       console.log('Sending confirmation email with vars:', confirmationTemplateVars);
       
-      // Send confirmation email to sender
       const confirmationResult = await emailjs.send(
         'service_6d6zyi9',
         'template_mr5y514',
@@ -203,7 +196,7 @@ export function ContactForm() {
               onChange={handleChange}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow`}
+              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-brand-600 outline-none transition-shadow`}
               placeholder="Your name"
             />
             {errors.name && (
@@ -222,7 +215,7 @@ export function ContactForm() {
               onChange={handleChange}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow`}
+              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-brand-600 outline-none transition-shadow`}
               placeholder="your@email.com"
             />
             {errors.email && (
@@ -241,7 +234,7 @@ export function ContactForm() {
               onChange={handleChange}
               className={`w-full px-4 py-2 rounded-lg border ${
                 errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow`}
+              } bg-white dark:bg-gray-700 focus:ring-2 focus:ring-brand-600 outline-none transition-shadow`}
               placeholder="Your message..."
             />
             {errors.message && (
@@ -252,7 +245,7 @@ export function ContactForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition-colors disabled:bg-brand-400 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -269,7 +262,6 @@ export function ContactForm() {
         </div>
       </form>
 
-      {/* Feedback Dialog */}
       {showDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-xl">
@@ -293,7 +285,7 @@ export function ContactForm() {
             </p>
             <button
               onClick={() => setShowDialog(false)}
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="w-full px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition-colors"
               aria-label="Close feedback dialog"
             >
               Close

@@ -24,20 +24,19 @@ export default function CombinedPage() {
   return (
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-4xl mx-auto">
-        {/* About Me Section */}
-        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
           About Me
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+          <div className="glow-panel bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Background</h3>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-left">
               I am a <strong>Bioinformatician (M.Sc.) and PhD researcher</strong> with a broad background in <strong>applied machine learning, deep learning development, and statistical analysis</strong> in life sciences. I have hands-on experience building <strong>end-to-end ML pipelines</strong>, developing <strong>scientific software tools and databases</strong>, with <strong>computational protein engineering</strong> as my core research topic. Passionate about <strong>entrepreneurship</strong> and turning research into real-world impact. Also a <strong>running, health and psychology enthusiast</strong>.
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+          <div className="glow-panel bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Skills</h3>
             <div className="space-y-2">
               {[
@@ -56,7 +55,7 @@ export default function CombinedPage() {
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-500 dark:to-accent-400 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${level}%` }}
                     ></div>
                   </div>
@@ -66,9 +65,8 @@ export default function CombinedPage() {
           </div>
         </div>
 
-        {/* Curriculum Vitae Section */}
         <div className="flex justify-between items-center mt-16 mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
             Curriculum Vitae
           </h2>
           <div className="flex gap-4">
@@ -76,7 +74,7 @@ export default function CombinedPage() {
               href={cvPdf}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition-colors"
             >
               <Eye className="h-4 w-4 mr-2" />
               Show CV
@@ -85,10 +83,9 @@ export default function CombinedPage() {
         </div>
 
         <div className="space-y-8">
-          {/* Experience Section */}
           <section>
             <div className="flex items-center mb-6">
-              <Briefcase className="h-6 w-6 mr-2 text-blue-600" />
+              <Briefcase className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-2xl font-semibold">Experience</h3>
             </div>
             
@@ -128,7 +125,7 @@ export default function CombinedPage() {
               ].map((job) => (
                 <div
                   key={job.role}
-                  className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+                  className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -143,14 +140,13 @@ export default function CombinedPage() {
             </div>
           </section>
 
-          {/* Education Section */}
           <section>
             <div className="flex items-center mb-6">
-              <GraduationCap className="h-6 w-6 mr-2 text-blue-600" />
+              <GraduationCap className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-2xl font-semibold">Education</h3>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
               <div className="space-y-6">
                 <div>
                   <div className="flex justify-between items-start mb-2">
@@ -184,10 +180,9 @@ export default function CombinedPage() {
             </div>
           </section>
 
-          {/* Certifications Section */}
           <section>
             <div className="flex items-center mb-6">
-              <Award className="h-6 w-6 mr-2 text-blue-600" />
+              <Award className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-2xl font-semibold">Certifications</h3>
             </div>
 
@@ -208,7 +203,7 @@ export default function CombinedPage() {
               ].map((cert) => (
                 <div
                   key={cert.name}
-                  className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
                 >
                   <h4 className="font-semibold">{cert.name}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -222,15 +217,14 @@ export default function CombinedPage() {
             </div>
           </section>
 
-          {/* Projects Section */}
           <section>
             <div className="flex items-center mb-6">
-              <Code className="h-6 w-6 mr-2 text-blue-600" />
+              <Code className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-2xl font-semibold">Projects</h3>
             </div>
 
             <div className="space-y-6">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+              <div className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-xl font-semibold">FWO Strategic Basic Research</h4>
                   <span className="text-sm text-gray-500 dark:text-gray-400">10/2022 - 10/2026</span>
@@ -240,7 +234,7 @@ export default function CombinedPage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+              <div className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-xl font-semibold">Enzymares</h4>
                   <span className="text-sm text-gray-500 dark:text-gray-400">10/2021 - 10/2025</span>
@@ -248,12 +242,12 @@ export default function CombinedPage() {
                 <p className="text-gray-600 dark:text-gray-400">
                   Delivered an <strong>end-to-end enzyme selection platform</strong> for industry use: a unified <strong>multi-source database</strong> at thousands of sequences scale and a <strong>full-stack annotation toolbox</strong> (web app + CLI + containerised ML backend).
                 </p>
-                <a href="https://www.ugent.be/marine/en/partnerships/enzymares" className="text-blue-600 hover:text-blue-700 text-sm mt-2 inline-block" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.ugent.be/marine/en/partnerships/enzymares" className="text-brand-700 hover:text-brand-800 dark:text-brand-400 dark:hover:text-brand-300 text-sm mt-2 inline-block" target="_blank" rel="noopener noreferrer">
                   Learn more →
                 </a>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+              <div className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="text-xl font-semibold">PhD Society, Board Member</h4>
                   <span className="text-sm text-gray-500 dark:text-gray-400">2025 - 2026</span>
@@ -265,10 +259,9 @@ export default function CombinedPage() {
             </div>
           </section>
 
-          {/* Languages Section */}
           <section>
             <div className="flex items-center mb-6">
-              <Globe className="h-6 w-6 mr-2 text-blue-600" />
+              <Globe className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-2xl font-semibold">Languages</h3>
             </div>
 
@@ -279,7 +272,7 @@ export default function CombinedPage() {
               ].map((lang) => (
                 <div
                   key={lang.language}
-                  className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                  className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
                 >
                   <h4 className="font-semibold">{lang.language}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{lang.proficiency}</p>
@@ -289,11 +282,10 @@ export default function CombinedPage() {
           </section>
         </div>
 
-        {/* Quotes Section */}
         <div className="mt-12">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+          <div className="glow-panel bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
             <div className="flex items-center mb-4">
-              <Quote className="h-6 w-6 mr-2 text-blue-600" />
+              <Quote className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
               <h3 className="text-xl font-semibold">Something to think about</h3>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
@@ -316,7 +308,6 @@ export default function CombinedPage() {
           </div>
         </div>
 
-        {/* Interests & Hobbies Section */}
         <h3 className="text-2xl font-bold mt-12 mb-6">Interests & Hobbies</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
           {[
@@ -330,9 +321,9 @@ export default function CombinedPage() {
           ].map(({ Icon, title, desc }) => (
             <div
               key={title}
-              className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="glow-panel glow-panel-hover bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
-              <Icon className="h-6 w-6 mb-2 text-blue-600" />
+              <Icon className="h-6 w-6 mb-2 text-brand-700 dark:text-brand-400" />
               <h4 className="font-semibold mb-1">{title}</h4>
               <p className="text-sm text-gray-600 dark:text-gray-400">{desc}</p>
             </div>

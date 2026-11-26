@@ -14,7 +14,7 @@ export function ContactInfo({ email, phone, location }: ContactInfoProps) {
       
       <div className="space-y-4">
         <div className="flex items-center">
-          <Mail className="h-5 w-5 text-blue-600 mr-3" />
+          <Mail className="h-5 w-5 text-brand-700 dark:text-brand-400 mr-3" />
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
             <p className="text-gray-900 dark:text-gray-100">{email}</p>
@@ -22,7 +22,7 @@ export function ContactInfo({ email, phone, location }: ContactInfoProps) {
         </div>
 
         <div className="flex items-center">
-          <Phone className="h-5 w-5 text-blue-600 mr-3" />
+          <Phone className="h-5 w-5 text-brand-700 dark:text-brand-400 mr-3" />
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">Phone</p>
             <p className="text-gray-900 dark:text-gray-100">{phone}</p>
@@ -30,7 +30,7 @@ export function ContactInfo({ email, phone, location }: ContactInfoProps) {
         </div>
 
         <div className="flex items-center">
-          <MapPin className="h-5 w-5 text-blue-600 mr-3" />
+          <MapPin className="h-5 w-5 text-brand-700 dark:text-brand-400 mr-3" />
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
             <p className="text-gray-900 dark:text-gray-100">{location}</p>

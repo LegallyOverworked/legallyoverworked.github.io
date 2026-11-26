@@ -12,13 +12,15 @@ interface BlogCardProps {
 
 export function BlogCard({ title, date, readTime, tags, image, slug }: BlogCardProps) {
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden opacity-60 pointer-events-none cursor-default select-none">
+    <article className="glow-panel bg-white dark:bg-gray-800 rounded-xl shadow-lg opacity-60 pointer-events-none cursor-default select-none">
       <div className="md:flex">
         <div className="md:w-1/3">
           <img
             src={image}
             alt={title}
-            className="h-48 w-full object-cover md:h-full grayscale"
+            loading="lazy"
+            decoding="async"
+            className="h-48 w-full object-cover md:h-full grayscale rounded-t-xl md:rounded-tr-none md:rounded-l-xl"
           />
         </div>
         <div className="p-6 md:w-2/3">

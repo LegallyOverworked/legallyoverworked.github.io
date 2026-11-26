@@ -26,7 +26,7 @@ export default function Projects() {
   return (
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
           Projects
         </h2>
 
@@ -34,15 +34,16 @@ export default function Projects() {
           {projects.map((project) => (
             <div
               key={project.title}
-              className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg opacity-60 pointer-events-none cursor-default select-none"
+              className="glow-panel bg-white dark:bg-gray-800 rounded-xl shadow-lg opacity-60 pointer-events-none cursor-default select-none"
             >
               <div className="relative">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover grayscale"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-48 object-cover grayscale rounded-t-xl"
                 />
-                {/* Read-time banner */}
                 <span className="absolute top-2 right-2 flex items-center gap-1 bg-black/70 text-white text-xs font-medium px-2.5 py-1 rounded-full backdrop-blur-sm">
                   <Clock className="h-3 w-3" />
                   {project.readTime}

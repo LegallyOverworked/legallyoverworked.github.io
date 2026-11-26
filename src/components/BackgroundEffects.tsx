@@ -1,31 +1,22 @@
 import { useMemo } from 'react';
-import { Dna, FlaskConical, BrainCircuit, Atom, TestTube, DnaIcon, Bot, Cpu, Brain, FlaskRound, Microscope, Code, Biohazard } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-const colors = [
-    'rgba(75, 0, 130, 0.15)', 
-    'rgba(138, 43, 226, 0.15)',
-    'rgba(106, 90, 205, 0.15)', 
-    'rgba(65, 105, 225, 0.15)', 
-  ];
-
-const icons = {
-  DNA: [Dna, DnaIcon, Atom, TestTube, Microscope],
-      Proteins: [Biohazard, Atom, TestTube, FlaskConical, Microscope],
-  Enzymes: [FlaskConical, FlaskRound, TestTube, Atom, Microscope],
-  AI: [BrainCircuit, Bot, Cpu, Brain, Code],
-};
-
-type IconCategory = 'DNA' | 'Proteins' | 'Enzymes' | 'AI';
+const colorClasses = [
+  'text-brand-800/15 dark:text-brand-400/15',
+  'text-brand-600/15 dark:text-brand-300/15',
+  'text-accent-600/15 dark:text-accent-300/15',
+  'text-accent-800/15 dark:text-accent-400/15',
+];
 
 interface BackgroundEffectsProps {
-  activeTab: IconCategory;
+  icons: LucideIcon[];
 }
 
-const BackgroundEffects = ({ activeTab }: BackgroundEffectsProps) => {
+const BackgroundEffects = ({ icons }: BackgroundEffectsProps) => {
   const selectedIcons = useMemo(() => {
-    const iconSet = icons[activeTab] || [];
-        return Array.from({ length: 50 }, (_, i) => {
-      const Icon = iconSet[i % iconSet.length];
+    if (icons.length === 0) return [];
+    return Array.from({ length: 50 }, (_, i) => {
+      const Icon = icons[i % icons.length];
       const style = {
         left: `${Math.random() * 100}vw`,
         top: `${Math.random() * 100}vh`,
@@ -33,11 +24,11 @@ const BackgroundEffects = ({ activeTab }: BackgroundEffectsProps) => {
         height: `${Math.random() * 2 + 1}rem`,
         animationDuration: `${Math.random() * 15 + 10}s`,
         animationDelay: `${Math.random() * 5}s`,
-        color: colors[Math.floor(Math.random() * colors.length)],
       };
-      return <Icon key={i} className="bouncing-icon" style={style} />;
+      const colorClass = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+      return <Icon key={i} className={`bouncing-icon ${colorClass}`} style={style} />;
     });
-  }, [activeTab]);
+  }, [icons]);
 
   return <div className="background-effects">{selectedIcons}</div>;
 };

@@ -44,7 +44,7 @@ export default function Research() {
   return (
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
           Research Work
         </h2>
 
@@ -63,7 +63,7 @@ export default function Research() {
         </div>
 
         <h3 className="text-2xl font-bold mb-6 flex items-center">
-          <Award className="h-6 w-6 mr-2 text-blue-600" />
+          <Award className="h-6 w-6 mr-2 text-brand-700 dark:text-brand-400" />
           Current Projects
         </h3>
 
@@ -73,7 +73,7 @@ export default function Research() {
           ))}
         </div>
 
-        <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="glow-panel mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <h3 className="text-xl font-bold mb-4">Skills & Expertise</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>

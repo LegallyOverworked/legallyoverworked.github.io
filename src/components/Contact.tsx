@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import siteIcon from '../assets/icon.png';
 import { Mail, MapPin, Phone, Send, Copy, Github, Gitlab, Linkedin, Twitter, Facebook, Instagram, Smile, X, Globe } from 'lucide-react';
 
-// Data Structure Definitions
 const countryCodes = [
   { code: '+32', country: 'BE' },
   { code: '+1', country: 'US' },
@@ -27,12 +25,11 @@ const additionalEmails = [
   { email: 'jalfrancois@hotmail.com', label: 'Hotmail' },
 ];
 
-// Subcomponent Definitions
 const ContactDetails = ({ icon: Icon, label, value, showValue, onToggle, onCopy }) => {
   return (
     <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
       <div className="flex items-center">
-        <Icon className="h-5 w-5 text-blue-600 mr-3" />
+        <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400 mr-3" />
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
           <p className="text-gray-900 dark:text-gray-100">
@@ -63,7 +60,7 @@ const SocialLink = ({ href, icon: Icon, label }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="p-3 rounded-full transition-colors bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90"
+    className="p-3 rounded-full transition-colors bg-gradient-to-r from-brand-800 to-accent-600 text-white hover:opacity-90"
     aria-label={label}
   >
     <Icon className="h-6 w-6" />
@@ -82,7 +79,6 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
   };
 
   const handleOuterClick = (e) => {
-    // Close when clicking outside the modal
     onClose();
   };
 
@@ -103,9 +99,8 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
         className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md relative group"
         onClick={handleInnerClick}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl blur-xl opacity-25"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-700/20 to-accent-500/20 rounded-xl blur-xl opacity-25"></div>
         
-        {/* Close button (X) at top right */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
@@ -114,12 +109,11 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
         </button>
 
         <div className="relative max-h-[60vh] overflow-auto">
-          <h3 className="text-xl font-semibold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h3 className="text-xl font-semibold mb-6 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
             Additional Contact Options
           </h3>
 
           <div className="space-y-6">
-            {/* Social Media Links */}
             <div>
               <h4 className="text-lg font-medium mb-3">Social Media</h4>
               <div className="space-y-3">
@@ -129,14 +123,13 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
                     className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
-                      <link.icon className="h-5 w-5 text-blue-600" />
+                      <link.icon className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                       <div>
                         <p className="font-medium">{link.platform}</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{link.url}</p>
                       </div>
                     </div>
                     <div className="flex space-x-2">
-                      {/* Open in new tab button */}
                       <button
                         onClick={() => openInNewTab(link.url)}
                         className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
@@ -153,7 +146,6 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
                         </svg>
                       </button>
 
-                      {/* Copy button */}
                       <button
                         onClick={() => copyToClipboard(link.url)}
                         className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
@@ -166,7 +158,6 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
               </div>
             </div>
 
-            {/* Additional Emails */}
             <div>
               <h4 className="text-lg font-medium mb-3">More Emails</h4>
               <div className="space-y-3">
@@ -178,14 +169,13 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
                       className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
                       <div className="flex items-center space-x-3">
-                        <Mail className="h-5 w-5 text-blue-600" />
+                        <Mail className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                         <div>
                           <p className="font-medium">{item.label}</p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">{item.email}</p>
                         </div>
                       </div>
                       <div className="flex space-x-2">
-                        {/* Open in new tab: we open the mailto link in new tab if possible */}
                         <button
                           onClick={() => openInNewTab(mailtoLink)}
                           className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
@@ -217,9 +207,9 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
 
           <button
             onClick={onClose}
-            className="mt-6 w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity relative group"
+            className="mt-6 w-full px-4 py-2 bg-gradient-to-r from-brand-800 to-accent-600 text-white rounded-lg hover:opacity-90 transition-opacity relative group"
           >
-            <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
+            <div className="absolute inset-0 bg-brand-700 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
             <span className="relative">Close</span>
           </button>
         </div>
@@ -228,9 +218,7 @@ const SocialModal = ({ isOpen, onClose, socialLinks, additionalEmails }) => {
   );
 };
 
-// Main Component
 export default function Contact() {
-  // State Management
   const [showEmail, setShowEmail] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
   const [showLocation, setShowLocation] = useState(false);
@@ -254,7 +242,6 @@ export default function Contact() {
     location: "Leuven, Belgium"
   };
 
-  // Utility Functions
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -283,26 +270,24 @@ export default function Contact() {
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mr-4">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent mr-4">
             Get in Touch
           </h2>
-          <img src={siteIcon} alt="Site Icon" className="w-10 h-10 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Contact Information */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+          <div className="glow-panel bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
             <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
             
             <div className="flex items-center p-4 bg-white dark:bg-gray-700 rounded-lg mb-4">
-              <Linkedin className="h-5 w-5 text-blue-600 mr-3" />
+              <Linkedin className="h-5 w-5 text-brand-700 dark:text-brand-400 mr-3" />
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">LinkedIn</p>
                 <a
                   href="https://www.linkedin.com/in/jaldert-fran%C3%A7ois/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-brand-700 dark:text-brand-400 hover:underline"
                 >
                   linkedin.com/in/jaldert-françois
                 </a>
@@ -338,26 +323,24 @@ export default function Contact() {
 
             <button
               onClick={() => setShowSocialModal(true)}
-              className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition-opacity relative group"
+              className="w-full mt-4 px-4 py-2 bg-gradient-to-r from-brand-800 to-accent-600 text-white rounded-lg hover:opacity-90 transition-opacity relative group"
             >
-              <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
+              <div className="absolute inset-0 bg-brand-700 rounded-lg blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
               <span className="relative">More Contact Options</span>
             </button>
           </div>
 
-          {/* Collaboration CTA */}
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center border border-blue-100 dark:border-gray-700">
-            <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Let's Collaborate</h3>
+          <div className="glow-panel bg-gradient-to-br from-brand-50 to-accent-50 dark:from-gray-800 dark:to-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-center border border-brand-100 dark:border-gray-700">
+            <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">Let's Collaborate</h3>
             <p className="text-gray-600 dark:text-gray-400">
               Always open to exciting collaborations and new projects, whether it's applied ML, bioinformatics, data engineering, or building something entirely new. If you have an interesting idea, let's make it happen.
             </p>
           </div>
         </div>
 
-        {/* Social Links Bar */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
+        <div className="glow-panel bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
           <div className="flex justify-center space-x-4 items-center relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-xl blur-xl opacity-25 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-700/10 to-accent-500/10 rounded-xl blur-xl opacity-25 pointer-events-none"></div>
             {socialLinks.map((link) => (
               <SocialLink
                 key={link.platform}
@@ -369,7 +352,6 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Social Modal */}
         <SocialModal
           isOpen={showSocialModal}
           onClose={() => setShowSocialModal(false)}

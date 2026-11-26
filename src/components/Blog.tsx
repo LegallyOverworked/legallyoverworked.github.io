@@ -41,7 +41,7 @@ export default function Blog() {
   return (
     <div className="min-h-screen p-4 pt-24">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-brand-800 to-accent-600 dark:from-brand-400 dark:to-accent-300 bg-clip-text text-transparent">
           Blogs & Writings
         </h2>
 
