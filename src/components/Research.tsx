@@ -18,7 +18,6 @@ export default function Research() {
       journal: "FWO - SB Research Grant",
       year: 2026,
       citations: 0,
-      link: "#",
       description: "Competitive national FWO-SB grant advancing AI-driven enzyme discovery: above SOTA temperature and pH optimum prediction, fine-tuned protein language model pipeline for large-scale EC classification"
     }
   ];

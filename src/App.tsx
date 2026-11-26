@@ -3,8 +3,6 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Research from './components/Research';
-import Projects from './components/Projects';
-import Blog from './components/Blog';
 import About from './components/About';
 import Contact from './components/Contact';
 
@@ -26,10 +24,9 @@ function App() {
         return <Home />;
       case 'Research':
         return <Research />;
-      case 'Projects':
-        return <Projects />;
-      case 'Blog':
-        return <Blog />;
+      // Projects and Blog are parked until they have real content: re-import
+      // ./components/Projects and ./components/Blog, add their cases here, and
+      // add the tab names back in Navbar.tsx.
       case 'About':
         return <About />;
       case 'Contact':

@@ -35,6 +35,13 @@ function shapePoint(shape: number, i: number): [number, number] {
 const CYCLE = 5;
 const STEPS = 8;
 
+function contain(offset: number, h: number): number {
+  const knee = h * 0.28;
+  const room = h * 0.05;
+  const over = Math.abs(offset) - knee;
+  return over <= 0 ? offset : Math.sign(offset) * (knee + room * Math.tanh(over / room));
+}
+
 export const diffusion: Scene = {
   still: 3.6,
   draw(ctx, w, h, t, pal, dead) {
@@ -54,7 +61,8 @@ export const diffusion: Scene = {
       POINTS.forEach((p, i) => {
         const s = shapePoint(shape, i);
         const x = cx + (s[0] * (1 - 0.25 * noise) + p.nx * 0.55 * noise + 0.03 * noise * Math.sin(t * 9 + p.phase)) * R;
-        const y = cy + (s[1] * (1 - 0.25 * noise) + p.ny * 0.4 * noise + 0.03 * noise * Math.cos(t * 8 + p.phase)) * R * 0.92;
+        const rise = (s[1] * (1 - 0.25 * noise) + p.ny * 0.4 * noise + 0.03 * noise * Math.cos(t * 8 + p.phase)) * R * 0.92;
+        const y = cy + contain(rise, h);
         dot(ctx, x, y, 1 + 2 * p.depth, i % 2 ? strandB(pal, x / w) : strandA(pal, x / w), (0.25 + 0.65 * p.depth) * (1 - 0.45 * noise));
       });
       for (let s = 0; s < STEPS; s += 1) {

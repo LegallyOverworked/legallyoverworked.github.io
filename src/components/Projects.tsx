@@ -16,7 +16,7 @@ export default function Projects() {
       readTime: "7 min read",
     },
     {
-      title: "Protein Rerepresentation Learning",
+      title: "Protein Representation Learning",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
       tags: ["Scikit-Learn", "R", "Machine Learning", "PLM"],
       readTime: "10 min read",

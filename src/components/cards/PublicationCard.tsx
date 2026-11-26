@@ -6,7 +6,7 @@ interface PublicationCardProps {
   journal: string;
   year: number;
   citations: number;
-  link: string;
+  link?: string;
   description?: string;
 }
 
@@ -20,13 +20,17 @@ export function PublicationCard({ title, journal, year, citations, link, descrip
           {description && <p className="text-gray-600 dark:text-gray-400 mb-2">{description}</p>}
           <p className="text-sm text-gray-500 dark:text-gray-400">{citations === 0 ? "In Progress" : `Citations: ${citations}`}</p>
         </div>
-        <a
-          href={link}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-          aria-label="View publication"
-        >
-          <ExternalLink className="h-5 w-5" />
-        </a>
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            aria-label={`Open ${title}`}
+          >
+            <ExternalLink className="h-5 w-5" />
+          </a>
+        )}
       </div>
     </div>
   );

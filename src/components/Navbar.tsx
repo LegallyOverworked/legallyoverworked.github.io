@@ -24,7 +24,9 @@ export default function Navbar({ currentTab, setCurrentTab, isDark, toggleTheme 
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [showPhoto]);
 
-  const tabs = ['Home', 'Research', 'Projects', 'Blog', 'About', 'Contact'];
+  // 'Projects' and 'Blog' still hold placeholder cards; add them back here
+  // once src/components/Projects.tsx and Blog.tsx have real content.
+  const tabs = ['Home', 'Research', 'About', 'Contact'];
 
   return (
     <nav className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 border-b border-gray-200 dark:border-gray-700">
